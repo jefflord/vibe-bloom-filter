@@ -149,11 +149,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(`Error: ${response.statusText}`);
             }
             // Parse response data
-            const sampleData = await response.json();
+            const sampleDataResponse = await response.json();
+            // Update data source information
+            const dataSourceElement = document.getElementById('dataSourceInfo');
+            if (dataSourceElement) {
+                if (sampleDataResponse.loadedFromFiles) {
+                    dataSourceElement.textContent = `Loaded ${sampleDataResponse.totalCount} records from JSON files. Showing ${sampleDataResponse.displayCount} rows.`;
+                    dataSourceElement.classList.add('success-text');
+                }
+                else {
+                    dataSourceElement.textContent = `Using ${sampleDataResponse.totalCount} generated records. Showing ${sampleDataResponse.displayCount} rows.`;
+                }
+            }
             // Clear existing rows
             sampleDataTableBody.innerHTML = '';
             // Populate table with sample data
-            sampleData.forEach(item => {
+            sampleDataResponse.data.forEach(item => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${escapeHtml(item.Name)}</td>
@@ -170,6 +181,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td colspan="3" class="error-message">Failed to load sample data. Please refresh the page to try again.</td>
                 </tr>
             `;
+            // Clear data source info on error
+            const dataSourceElement = document.getElementById('dataSourceInfo');
+            if (dataSourceElement) {
+                dataSourceElement.textContent = 'Error loading data from server.';
+                dataSourceElement.classList.add('error-text');
+            }
         }
     }
     /**

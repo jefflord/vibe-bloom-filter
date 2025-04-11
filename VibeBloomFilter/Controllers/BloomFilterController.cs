@@ -64,7 +64,13 @@ public class BloomFilterController : ControllerBase
             result.Add(item);
         }
         
-        return Ok(result);
+        // Return data with metadata
+        return Ok(new {
+            TotalCount = data.Rows.Count,
+            DisplayCount = result.Count,
+            Data = result,
+            LoadedFromFiles = _bloomFilterService.LoadedFromJsonFiles
+        });
     }
 
     /// <summary>

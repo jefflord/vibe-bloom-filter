@@ -20,6 +20,11 @@ builder.Services.AddCors(options =>
 // Register the BloomFilterService as a singleton
 builder.Services.AddSingleton<BloomFilterService>();
 
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.SetMinimumLevel(LogLevel.Information);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

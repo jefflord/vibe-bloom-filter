@@ -1,7 +1,9 @@
 using System.Data;
 using System.Text;
+using System.Text.Json;
 using BloomFilter;
 using BloomFilter.HashAlgorithms;
+using Microsoft.Extensions.Logging;
 using VibeBloomFilter.Models;
 
 namespace VibeBloomFilter.Services;
@@ -22,6 +24,12 @@ public class BloomFilterService
     
     // DataTable containing sample data
     private readonly DataTable _sampleData;
+    
+    // Logger
+    private readonly ILogger<BloomFilterService> _logger;
+    
+    // Flag to indicate if data was loaded from JSON files
+    public bool LoadedFromJsonFiles { get; private set; }
 
     // False positive rate for all filters (1%)
     // This rate was chosen as a good balance between accuracy and memory usage.
@@ -35,8 +43,10 @@ public class BloomFilterService
     /// <summary>
     /// Constructor: Initializes the service by generating sample data and creating Bloom filters
     /// </summary>
-    public BloomFilterService()
+    public BloomFilterService(ILogger<BloomFilterService> logger)
     {
+        _logger = logger;
+        
         // Create bloom filters with appropriate parameters for each column type
         _nameFilter = FilterBuilder.Build(
             expectedElements: ExpectedElementCount, 
@@ -53,11 +63,131 @@ public class BloomFilterService
             errorRate: FalsePositiveRate,
             hashFunction: new Murmur3());
         
-        // Generate sample data
-        _sampleData = GenerateSampleData();
+        // Load sample data from JSON files
+        _logger.LogInformation("Loading sample data from JSON files");
+        _sampleData = LoadSampleDataFromJsonFiles();
+        
+        // If no data was found in JSON files, generate sample data instead
+        if (_sampleData.Rows.Count == 0)
+        {
+            _logger.LogInformation("No data found in JSON files, generating sample data");
+            _sampleData = GenerateSampleData();
+        }
+        else
+        {
+            _logger.LogInformation("Successfully loaded {RowCount} rows from JSON files", _sampleData.Rows.Count);
+        }
         
         // Populate bloom filters with data
+        _logger.LogInformation("Populating bloom filters");
         PopulateBloomFilters();
+    }
+
+    /// <summary>
+    /// Loads data from JSON files in the Data directory
+    /// </summary>
+    private DataTable LoadSampleDataFromJsonFiles()
+    {
+        // Create a new DataTable with the specified columns
+        var table = new DataTable();
+        table.Columns.Add("Name", typeof(string));
+        table.Columns.Add("Address", typeof(string));
+        table.Columns.Add("UserId", typeof(int));
+
+        try
+        {
+            // Get the Data directory path
+            var dataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+            _logger.LogInformation("Looking for JSON files in directory: {Directory}", dataDirectory);
+            
+            // If the directory doesn't exist, return empty table (will be populated with generated data)
+            if (!Directory.Exists(dataDirectory))
+            {
+                _logger.LogWarning("Data directory does not exist: {Directory}", dataDirectory);
+                return table;
+            }
+            
+            // Get all JSON files in the Data directory
+            var jsonFiles = Directory.GetFiles(dataDirectory, "*.json");
+            _logger.LogInformation("Found {Count} JSON files in the Data directory", jsonFiles.Length);
+            
+            // If no files are found, return empty table
+            if (jsonFiles.Length == 0)
+            {
+                _logger.LogWarning("No JSON files found in Data directory");
+                return table;
+            }
+            
+            // Read data from each JSON file and add to the DataTable
+            int totalRowsAdded = 0;
+            foreach (var file in jsonFiles)
+            {
+                try
+                {
+                    _logger.LogDebug("Reading file: {FileName}", Path.GetFileName(file));
+                    // Read the file content
+                    string jsonContent = File.ReadAllText(file);
+                    
+                    // Deserialize to list of dictionaries
+                    var items = JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>>(
+                        jsonContent, 
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    
+                    int rowsAdded = 0;
+                    if (items != null)
+                    {
+                        foreach (var item in items)
+                        {
+                            try
+                            {
+                                // Extract values, handle type conversions
+                                string name = item.TryGetValue("Name", out JsonElement nameElement) ? 
+                                    nameElement.ToString() : string.Empty;
+                                
+                                string address = item.TryGetValue("Address", out JsonElement addressElement) ? 
+                                    addressElement.ToString() : string.Empty;
+                                
+                                // Convert UserId from JsonElement to int
+                                int userId = 0;
+                                if (item.TryGetValue("UserId", out JsonElement userIdElement) && 
+                                    userIdElement.ValueKind == JsonValueKind.Number)
+                                {
+                                    userId = userIdElement.GetInt32();
+                                }
+                                
+                                // Add row to table
+                                table.Rows.Add(name, address, userId);
+                                rowsAdded++;
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogError(ex, "Error processing item in file {FileName}", Path.GetFileName(file));
+                            }
+                        }
+                    }
+                    
+                    _logger.LogInformation("Added {RowCount} rows from file {FileName}", rowsAdded, Path.GetFileName(file));
+                    totalRowsAdded += rowsAdded;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error reading JSON file {FileName}", Path.GetFileName(file));
+                    // Continue to the next file if one fails
+                }
+            }
+            
+            _logger.LogInformation("Total rows added from all JSON files: {TotalRowCount}", totalRowsAdded);
+            
+            // Set the flag indicating whether data was loaded from files
+            LoadedFromJsonFiles = totalRowsAdded > 0;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading JSON files");
+            LoadedFromJsonFiles = false;
+        }
+
+        return table;
     }
 
     /// <summary>

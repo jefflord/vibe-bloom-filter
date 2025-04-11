@@ -186,3 +186,43 @@ footer {
     color: white;
     background-color: var(--danger-color);
 }
+
+.data-source-container {
+    margin: 10px 0;
+}
+
+.data-source-info {
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.success-text {
+    color: var(--success-color);
+    font-weight: bold;
+}
+
+.error-text {
+    color: var(--danger-color);
+    font-weight: bold;
+}
+
+.data-source-container {
+    margin: 10px 0;
+}
+
+.data-source-info {
+    font-size: 14px;
+    padding: 5px 0;
+}
+
+.success-text {
+    color: var(--success-color);
+    font-weight: bold;
+}
+
+.error-message {
+    color: var(--danger-color);
+    text-align: center;
+    padding: 10px;
+}
