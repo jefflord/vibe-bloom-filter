@@ -18,7 +18,6 @@ C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\bin\Debug\net9.0\Bl
 C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\bin\Debug\net9.0\Microsoft.OpenApi.dll
 C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\scopedcss\bundle\VibeBloomFilter.styles.css
-C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\compressed\phtwtc2zxy-b609xhof7r.gz
 C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\compressed\zfv4tran7q-6xcaabic55.gz
 C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\staticwebassets.development.json
@@ -35,5 +34,6 @@ C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\re
 C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\VibeBloomFilter.pdb
 C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\VibeBloomFilter.genruntimeconfig.cache
 C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\ref\VibeBloomFilter.dll
-C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\compressed\b9ps3txh0w-a2j8fxrgm8.gz
-C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\compressed\775ni45x94-3xd27mibf0.gz
+C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\compressed\phtwtc2zxy-5jau9cgz8e.gz
+C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\compressed\b9ps3txh0w-ax0b0tnduk.gz
+C:\Users\jeff\source\repos\vibe-bloom-filter\VibeBloomFilter\obj\Debug\net9.0\compressed\775ni45x94-xqq8xv70xh.gz

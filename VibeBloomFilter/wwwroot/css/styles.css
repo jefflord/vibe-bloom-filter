@@ -162,3 +162,27 @@ footer {
     color: #7f8c8d;
     font-size: 14px;
 }
+
+.button-container {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.status-message {
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: opacity 0.3s;
+}
+
+.status-message.success {
+    color: white;
+    background-color: var(--success-color);
+}
+
+.status-message.error {
+    color: white;
+    background-color: var(--danger-color);
+}

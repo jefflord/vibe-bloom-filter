@@ -21,6 +21,13 @@ interface SampleDataItem {
     UserId: number;
 }
 
+interface GenerateFilesResult {
+    success: boolean;
+    message: string;
+    files?: string[];
+    error?: string;
+}
+
 // Wait for the DOM to be fully loaded before attaching events
 document.addEventListener('DOMContentLoaded', () => {
     // Get references to DOM elements
@@ -30,6 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const nameResult = document.getElementById('nameResult')!;
     const addressResult = document.getElementById('addressResult')!;
     const userIdResult = document.getElementById('userIdResult')!;
+    const generateFilesButton = document.getElementById('generateFilesButton') as HTMLButtonElement;
+    const generationStatus = document.getElementById('generationStatus') as HTMLSpanElement;
     const sampleDataTableBody = document.querySelector('#sampleDataTable tbody') as HTMLTableSectionElement;
 
     // Load sample data when the page loads
@@ -51,6 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
             searchButton.click();
         }
     });
+
+    // Add click event listener to the generate files button
+    generateFilesButton.addEventListener('click', generateSampleFiles);
 
     /**
      * Queries the backend API with the provided search term and updates the UI with results
@@ -84,6 +96,50 @@ document.addEventListener('DOMContentLoaded', () => {
             // Restore button state
             searchButton.disabled = false;
             searchButton.textContent = 'Search';
+        }
+    }
+
+    /**
+     * Generates sample JSON files by calling the backend API
+     */
+    async function generateSampleFiles(): Promise<void> {
+        try {
+            // Show loading state
+            generateFilesButton.disabled = true;
+            generateFilesButton.textContent = 'Generating...';
+            generationStatus.textContent = 'Generating files...';
+            generationStatus.className = 'status-message';
+            
+            // Call the backend API to generate files
+            const response = await fetch(`${API_BASE_URL}/generate`, {
+                method: 'POST'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+            
+            // Parse response data
+            const result: GenerateFilesResult = await response.json();
+            
+            // Update UI with success message
+            generationStatus.textContent = `${result.message}`;
+            generationStatus.className = 'status-message success';
+            
+            // Show the generated files for 5 seconds
+            setTimeout(() => {
+                generationStatus.textContent = '';
+                generationStatus.className = 'status-message';
+            }, 5000);
+        } catch (error) {
+            console.error('Error generating sample files:', error);
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            generationStatus.textContent = `Error: ${errorMessage}`;
+            generationStatus.className = 'status-message error';
+        } finally {
+            // Restore button state
+            generateFilesButton.disabled = false;
+            generateFilesButton.textContent = 'Generate 10 Sample JSON Files';
         }
     }
 
