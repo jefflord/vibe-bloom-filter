@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Bloom Filter</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Vibe Bloom Filter</h1>
+            <p>Demonstrating the use of Bloom filters for efficient data lookup</p>
+        </header>
+
+        <main>
+            <section class="search-container">
+                <h2>Search</h2>
+                <p>Enter a value to search for in the Bloom filters:</p>
+                
+                <div class="search-input">
+                    <input type="text" id="searchInput" placeholder="Enter name, address, or user ID...">
+                    <button id="searchButton">Search</button>
+                </div>
+                
+                <div id="searchResults" class="hidden">
+                    <h3>Results</h3>
+                    <p>The value might exist in these columns:</p>
+                    
+                    <div class="bloom-results">
+                        <div class="result-item" id="nameResult">
+                            <h4>Name</h4>
+                            <div class="indicator">?</div>
+                        </div>
+                        
+                        <div class="result-item" id="addressResult">
+                            <h4>Address</h4>
+                            <div class="indicator">?</div>
+                        </div>
+                        
+                        <div class="result-item" id="userIdResult">
+                            <h4>User ID</h4>
+                            <div class="indicator">?</div>
+                        </div>
+                    </div>
+                    
+                    <div class="explanation">
+                        <h4>About Bloom Filters</h4>
+                        <p>Bloom filters are probability data structures that can tell you with certainty when a value is <strong>not</strong> in a set, but may have false positives.</p>
+                        <p>When you see:</p>
+                        <ul>
+                            <li><strong>"Yes"</strong>: The value <em>might</em> be in this column (99% certainty)</li>
+                            <li><strong>"No"</strong>: The value is <em>definitely not</em> in this column (100% certainty)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="sample-data-container">
+                <h2>Sample Data</h2>
+                <p>This shows some of the data that the Bloom filters were created from:</p>
+                
+                <table id="sampleDataTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>User ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">Loading sample data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+        
+        <footer>
+            <p>Vibe Bloom Filter Demo &copy; 2025</p>
+            <p>False Positive Rate: 1% - Chosen for optimal balance between memory usage and accuracy</p>
+        </footer>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

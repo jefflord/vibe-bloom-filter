@@ -1,0 +1,1485 @@
+{
+  "Version": 1,
+  "Hash": "bfCb0h3Yg5XSulH4WbsgA4rUOohG/KcZADyG8aYKCOY=",
+  "Source": "VibeBloomFilter",
+  "BasePath": "_content/VibeBloomFilter",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "VibeBloomFilter\\wwwroot",
+      "Source": "VibeBloomFilter",
+      "ContentRoot": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\",
+      "BasePath": "_content/VibeBloomFilter",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\775ni45x94-3xd27mibf0.gz",
+      "SourceId": "VibeBloomFilter",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/VibeBloomFilter",
+      "RelativePath": "js/app#[.{fingerprint=3xd27mibf0}]?.js.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\js\\app.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "puejmxdl8i",
+      "Integrity": "DySg3jqnwr74pyXmmcwWm8WA2UVUJ3uP/bXzO1MQGWU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\js\\app.js"
+    },
+    {
+      "Identity": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\b9ps3txh0w-a2j8fxrgm8.gz",
+      "SourceId": "VibeBloomFilter",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/VibeBloomFilter",
+      "RelativePath": "index#[.{fingerprint=a2j8fxrgm8}]?.html.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\index.html",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "kmxwtnzgvm",
+      "Integrity": "PJs9chedz99w3so5soCHZIfZbAkiKhCXx3IyFBSLwrs=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\index.html"
+    },
+    {
+      "Identity": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\phtwtc2zxy-b609xhof7r.gz",
+      "SourceId": "VibeBloomFilter",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/VibeBloomFilter",
+      "RelativePath": "css/styles#[.{fingerprint=b609xhof7r}]?.css.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\css\\styles.css",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "qrsqahsokk",
+      "Integrity": "JgKog+bKMHkfAycICpr1IsT5gSZ+IzO3ymQS7N9ChQU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\css\\styles.css"
+    },
+    {
+      "Identity": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\zfv4tran7q-6xcaabic55.gz",
+      "SourceId": "VibeBloomFilter",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/VibeBloomFilter",
+      "RelativePath": "tsconfig#[.{fingerprint=6xcaabic55}]?.json.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\tsconfig.json",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "h9q1nchyme",
+      "Integrity": "yw3Pjh6NitT1lD6kXj7WflOFMZpn2hMvXFWULe3LXBI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\tsconfig.json"
+    },
+    {
+      "Identity": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\css\\styles.css",
+      "SourceId": "VibeBloomFilter",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\",
+      "BasePath": "_content/VibeBloomFilter",
+      "RelativePath": "css/styles#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "b609xhof7r",
+      "Integrity": "3bH0cZaiAyzH4E1k/myU7WYFEdPWb/vVYOpCj9ZXf9I=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\styles.css"
+    },
+    {
+      "Identity": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\index.html",
+      "SourceId": "VibeBloomFilter",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\",
+      "BasePath": "_content/VibeBloomFilter",
+      "RelativePath": "index#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "a2j8fxrgm8",
+      "Integrity": "fqopKmeC1/LjkFqgsYBbLjVO0jMkaNzbplpE+04aPj4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    },
+    {
+      "Identity": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\js\\app.js",
+      "SourceId": "VibeBloomFilter",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\",
+      "BasePath": "_content/VibeBloomFilter",
+      "RelativePath": "js/app#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "3xd27mibf0",
+      "Integrity": "Ce6V91+MNBz2Wh9diIFiLaNVht0E2HeU0gHCUV3emdw=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\app.js"
+    },
+    {
+      "Identity": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\ts\\app.ts",
+      "SourceId": "VibeBloomFilter",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\",
+      "BasePath": "_content/VibeBloomFilter",
+      "RelativePath": "ts/app#[.{fingerprint}]?.ts",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "rhoh1xsqp0",
+      "Integrity": "wWT5Nxqx3V2K7RkO2QNTl1hL+tdiZh7JhrdR+3JZPHg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\ts\\app.ts"
+    },
+    {
+      "Identity": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\tsconfig.json",
+      "SourceId": "VibeBloomFilter",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\",
+      "BasePath": "_content/VibeBloomFilter",
+      "RelativePath": "tsconfig#[.{fingerprint}]?.json",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "6xcaabic55",
+      "Integrity": "6tU/1L5RCg1nA9FdJVdI0k6F4oiLeiVIIk1J4nS0/Vc=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\tsconfig.json"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "css/styles.b609xhof7r.css",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\phtwtc2zxy-b609xhof7r.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001108647450"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "901"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"JgKog+bKMHkfAycICpr1IsT5gSZ+IzO3ymQS7N9ChQU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 18:30:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"3bH0cZaiAyzH4E1k/myU7WYFEdPWb/vVYOpCj9ZXf9I=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "b609xhof7r"
+        },
+        {
+          "Name": "label",
+          "Value": "css/styles.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-3bH0cZaiAyzH4E1k/myU7WYFEdPWb/vVYOpCj9ZXf9I="
+        }
+      ]
+    },
+    {
+      "Route": "css/styles.b609xhof7r.css",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\css\\styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2970"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"3bH0cZaiAyzH4E1k/myU7WYFEdPWb/vVYOpCj9ZXf9I=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 18:30:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "b609xhof7r"
+        },
+        {
+          "Name": "label",
+          "Value": "css/styles.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-3bH0cZaiAyzH4E1k/myU7WYFEdPWb/vVYOpCj9ZXf9I="
+        }
+      ]
+    },
+    {
+      "Route": "css/styles.b609xhof7r.css.gz",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\phtwtc2zxy-b609xhof7r.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "901"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"JgKog+bKMHkfAycICpr1IsT5gSZ+IzO3ymQS7N9ChQU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 18:30:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "b609xhof7r"
+        },
+        {
+          "Name": "label",
+          "Value": "css/styles.css.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-JgKog+bKMHkfAycICpr1IsT5gSZ+IzO3ymQS7N9ChQU="
+        }
+      ]
+    },
+    {
+      "Route": "css/styles.css",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\phtwtc2zxy-b609xhof7r.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001108647450"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "901"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"JgKog+bKMHkfAycICpr1IsT5gSZ+IzO3ymQS7N9ChQU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 18:30:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"3bH0cZaiAyzH4E1k/myU7WYFEdPWb/vVYOpCj9ZXf9I=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-3bH0cZaiAyzH4E1k/myU7WYFEdPWb/vVYOpCj9ZXf9I="
+        }
+      ]
+    },
+    {
+      "Route": "css/styles.css",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\css\\styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2970"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"3bH0cZaiAyzH4E1k/myU7WYFEdPWb/vVYOpCj9ZXf9I=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 18:30:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-3bH0cZaiAyzH4E1k/myU7WYFEdPWb/vVYOpCj9ZXf9I="
+        }
+      ]
+    },
+    {
+      "Route": "css/styles.css.gz",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\phtwtc2zxy-b609xhof7r.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "901"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"JgKog+bKMHkfAycICpr1IsT5gSZ+IzO3ymQS7N9ChQU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 18:30:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-JgKog+bKMHkfAycICpr1IsT5gSZ+IzO3ymQS7N9ChQU="
+        }
+      ]
+    },
+    {
+      "Route": "index.a2j8fxrgm8.html",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\b9ps3txh0w-a2j8fxrgm8.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000945179584"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1057"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"PJs9chedz99w3so5soCHZIfZbAkiKhCXx3IyFBSLwrs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:35:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"fqopKmeC1/LjkFqgsYBbLjVO0jMkaNzbplpE+04aPj4=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "a2j8fxrgm8"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-fqopKmeC1/LjkFqgsYBbLjVO0jMkaNzbplpE+04aPj4="
+        }
+      ]
+    },
+    {
+      "Route": "index.a2j8fxrgm8.html",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3623"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"fqopKmeC1/LjkFqgsYBbLjVO0jMkaNzbplpE+04aPj4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:35:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "a2j8fxrgm8"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-fqopKmeC1/LjkFqgsYBbLjVO0jMkaNzbplpE+04aPj4="
+        }
+      ]
+    },
+    {
+      "Route": "index.a2j8fxrgm8.html.gz",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\b9ps3txh0w-a2j8fxrgm8.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1057"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"PJs9chedz99w3so5soCHZIfZbAkiKhCXx3IyFBSLwrs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:35:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "a2j8fxrgm8"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-PJs9chedz99w3so5soCHZIfZbAkiKhCXx3IyFBSLwrs="
+        }
+      ]
+    },
+    {
+      "Route": "index.html",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\b9ps3txh0w-a2j8fxrgm8.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000945179584"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1057"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"PJs9chedz99w3so5soCHZIfZbAkiKhCXx3IyFBSLwrs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:35:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"fqopKmeC1/LjkFqgsYBbLjVO0jMkaNzbplpE+04aPj4=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-fqopKmeC1/LjkFqgsYBbLjVO0jMkaNzbplpE+04aPj4="
+        }
+      ]
+    },
+    {
+      "Route": "index.html",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3623"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"fqopKmeC1/LjkFqgsYBbLjVO0jMkaNzbplpE+04aPj4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:35:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-fqopKmeC1/LjkFqgsYBbLjVO0jMkaNzbplpE+04aPj4="
+        }
+      ]
+    },
+    {
+      "Route": "index.html.gz",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\b9ps3txh0w-a2j8fxrgm8.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1057"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"PJs9chedz99w3so5soCHZIfZbAkiKhCXx3IyFBSLwrs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:35:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-PJs9chedz99w3so5soCHZIfZbAkiKhCXx3IyFBSLwrs="
+        }
+      ]
+    },
+    {
+      "Route": "js/app.3xd27mibf0.js",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\775ni45x94-3xd27mibf0.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000592417062"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1687"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DySg3jqnwr74pyXmmcwWm8WA2UVUJ3uP/bXzO1MQGWU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:38:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"Ce6V91+MNBz2Wh9diIFiLaNVht0E2HeU0gHCUV3emdw=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3xd27mibf0"
+        },
+        {
+          "Name": "label",
+          "Value": "js/app.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Ce6V91+MNBz2Wh9diIFiLaNVht0E2HeU0gHCUV3emdw="
+        }
+      ]
+    },
+    {
+      "Route": "js/app.3xd27mibf0.js",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\js\\app.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5577"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Ce6V91+MNBz2Wh9diIFiLaNVht0E2HeU0gHCUV3emdw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:38:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3xd27mibf0"
+        },
+        {
+          "Name": "label",
+          "Value": "js/app.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Ce6V91+MNBz2Wh9diIFiLaNVht0E2HeU0gHCUV3emdw="
+        }
+      ]
+    },
+    {
+      "Route": "js/app.3xd27mibf0.js.gz",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\775ni45x94-3xd27mibf0.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1687"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DySg3jqnwr74pyXmmcwWm8WA2UVUJ3uP/bXzO1MQGWU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:38:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3xd27mibf0"
+        },
+        {
+          "Name": "label",
+          "Value": "js/app.js.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-DySg3jqnwr74pyXmmcwWm8WA2UVUJ3uP/bXzO1MQGWU="
+        }
+      ]
+    },
+    {
+      "Route": "js/app.js",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\775ni45x94-3xd27mibf0.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000592417062"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1687"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DySg3jqnwr74pyXmmcwWm8WA2UVUJ3uP/bXzO1MQGWU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:38:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"Ce6V91+MNBz2Wh9diIFiLaNVht0E2HeU0gHCUV3emdw=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Ce6V91+MNBz2Wh9diIFiLaNVht0E2HeU0gHCUV3emdw="
+        }
+      ]
+    },
+    {
+      "Route": "js/app.js",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\js\\app.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5577"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Ce6V91+MNBz2Wh9diIFiLaNVht0E2HeU0gHCUV3emdw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:38:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Ce6V91+MNBz2Wh9diIFiLaNVht0E2HeU0gHCUV3emdw="
+        }
+      ]
+    },
+    {
+      "Route": "js/app.js.gz",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\775ni45x94-3xd27mibf0.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1687"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DySg3jqnwr74pyXmmcwWm8WA2UVUJ3uP/bXzO1MQGWU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:38:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-DySg3jqnwr74pyXmmcwWm8WA2UVUJ3uP/bXzO1MQGWU="
+        }
+      ]
+    },
+    {
+      "Route": "ts/app.rhoh1xsqp0.ts",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\ts\\app.ts",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6263"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/vnd.dlna.mpeg-tts"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wWT5Nxqx3V2K7RkO2QNTl1hL+tdiZh7JhrdR+3JZPHg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:16:13 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "rhoh1xsqp0"
+        },
+        {
+          "Name": "label",
+          "Value": "ts/app.ts"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-wWT5Nxqx3V2K7RkO2QNTl1hL+tdiZh7JhrdR+3JZPHg="
+        }
+      ]
+    },
+    {
+      "Route": "ts/app.ts",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\ts\\app.ts",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6263"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/vnd.dlna.mpeg-tts"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wWT5Nxqx3V2K7RkO2QNTl1hL+tdiZh7JhrdR+3JZPHg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 20:16:13 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-wWT5Nxqx3V2K7RkO2QNTl1hL+tdiZh7JhrdR+3JZPHg="
+        }
+      ]
+    },
+    {
+      "Route": "tsconfig.6xcaabic55.json",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\zfv4tran7q-6xcaabic55.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.005154639175"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "193"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"yw3Pjh6NitT1lD6kXj7WflOFMZpn2hMvXFWULe3LXBI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 18:30:28 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"6tU/1L5RCg1nA9FdJVdI0k6F4oiLeiVIIk1J4nS0/Vc=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "6xcaabic55"
+        },
+        {
+          "Name": "label",
+          "Value": "tsconfig.json"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-6tU/1L5RCg1nA9FdJVdI0k6F4oiLeiVIIk1J4nS0/Vc="
+        }
+      ]
+    },
+    {
+      "Route": "tsconfig.6xcaabic55.json",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\tsconfig.json",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "298"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6tU/1L5RCg1nA9FdJVdI0k6F4oiLeiVIIk1J4nS0/Vc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 18:30:28 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "6xcaabic55"
+        },
+        {
+          "Name": "label",
+          "Value": "tsconfig.json"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-6tU/1L5RCg1nA9FdJVdI0k6F4oiLeiVIIk1J4nS0/Vc="
+        }
+      ]
+    },
+    {
+      "Route": "tsconfig.6xcaabic55.json.gz",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\zfv4tran7q-6xcaabic55.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "193"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"yw3Pjh6NitT1lD6kXj7WflOFMZpn2hMvXFWULe3LXBI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 18:30:28 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "6xcaabic55"
+        },
+        {
+          "Name": "label",
+          "Value": "tsconfig.json.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-yw3Pjh6NitT1lD6kXj7WflOFMZpn2hMvXFWULe3LXBI="
+        }
+      ]
+    },
+    {
+      "Route": "tsconfig.json",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\zfv4tran7q-6xcaabic55.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.005154639175"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "193"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"yw3Pjh6NitT1lD6kXj7WflOFMZpn2hMvXFWULe3LXBI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 18:30:28 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"6tU/1L5RCg1nA9FdJVdI0k6F4oiLeiVIIk1J4nS0/Vc=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-6tU/1L5RCg1nA9FdJVdI0k6F4oiLeiVIIk1J4nS0/Vc="
+        }
+      ]
+    },
+    {
+      "Route": "tsconfig.json",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\wwwroot\\tsconfig.json",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "298"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6tU/1L5RCg1nA9FdJVdI0k6F4oiLeiVIIk1J4nS0/Vc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 18:30:28 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-6tU/1L5RCg1nA9FdJVdI0k6F4oiLeiVIIk1J4nS0/Vc="
+        }
+      ]
+    },
+    {
+      "Route": "tsconfig.json.gz",
+      "AssetFile": "C:\\Users\\jeff\\source\\repos\\vibe-bloom-filter\\VibeBloomFilter\\obj\\Debug\\net9.0\\compressed\\zfv4tran7q-6xcaabic55.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "193"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"yw3Pjh6NitT1lD6kXj7WflOFMZpn2hMvXFWULe3LXBI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 18:30:28 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-yw3Pjh6NitT1lD6kXj7WflOFMZpn2hMvXFWULe3LXBI="
+        }
+      ]
+    }
+  ]
+}
