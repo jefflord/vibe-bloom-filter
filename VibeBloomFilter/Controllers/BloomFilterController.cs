@@ -55,12 +55,31 @@ public class BloomFilterController : ControllerBase
         for (int i = 0; i < rowCount; i++)
         {
             var row = data.Rows[i];
+            
+            // Handle supporting document IDs - convert from comma-separated string to array
+            var supportingDocIds = row["SupportingDocumentIds"].ToString();
+            var docArray = !string.IsNullOrEmpty(supportingDocIds) 
+                ? supportingDocIds.Split(',').Select(id => id.Trim()).ToArray() 
+                : new string[0];
+            
             var item = new Dictionary<string, object>
             {
                 { "Name", row["Name"] },
                 { "Address", row["Address"] },
-                { "UserId", row["UserId"] }
+                { "UserId", row["UserId"] },
+                { "DisputeDate", row["DisputeDate"] },
+                { "CreditBureau", row["CreditBureau"] },
+                { "AccountNumber", row["AccountNumber"] },
+                { "SSN", row["SSN"] },
+                { "DisputedItemDescription", row["DisputedItemDescription"] },
+                { "DisputeReason", row["DisputeReason"] },
+                { "SupportingDocumentIds", docArray },
+                { "OriginalAmount", row["OriginalAmount"] },
+                { "DisputedAmount", row["DisputedAmount"] },
+                { "AccountStatusBeforeDispute", row["AccountStatusBeforeDispute"] },
+                { "AccountStatusAfterDispute", row["AccountStatusAfterDispute"] }
             };
+            
             result.Add(item);
         }
         
@@ -79,7 +98,7 @@ public class BloomFilterController : ControllerBase
     /// <param name="count">Number of files to generate</param>
     /// <returns>Result containing the paths of the generated files</returns>
     [HttpPost("generate")]
-    public IActionResult GenerateSampleFiles([FromQuery] int count = 5000)
+    public IActionResult GenerateSampleFiles([FromQuery] int count = 100)
     {
         try
         {
@@ -102,7 +121,7 @@ public class BloomFilterController : ControllerBase
             {
                 // Take a random subset of the data for each file
                 var random = new Random(Guid.NewGuid().GetHashCode());
-                var rowCount = random.Next(1000, 1000);
+                var rowCount = random.Next(500, 1000); // Between 5 and 15 records per file
                 
                 // Convert rows to Person objects
                 var personList = new List<Dictionary<string, object>>();
@@ -112,11 +131,28 @@ public class BloomFilterController : ControllerBase
                     var rowIndex = random.Next(0, data.Rows.Count);
                     var row = data.Rows[rowIndex];
                     
+                    // Handle supporting document IDs - convert from comma-separated string to array
+                    var supportingDocIds = row["SupportingDocumentIds"].ToString();
+                    var docArray = !string.IsNullOrEmpty(supportingDocIds) 
+                        ? supportingDocIds.Split(',').Select(id => id.Trim()).ToArray() 
+                        : new string[0];
+                    
                     var item = new Dictionary<string, object>
                     {
                         { "Name", row["Name"] },
                         { "Address", row["Address"] },
-                        { "UserId", row["UserId"] }
+                        { "UserId", row["UserId"] },
+                        { "DisputeDate", row["DisputeDate"] },
+                        { "CreditBureau", row["CreditBureau"] },
+                        { "AccountNumber", row["AccountNumber"] },
+                        { "SSN", row["SSN"] },
+                        { "DisputedItemDescription", row["DisputedItemDescription"] },
+                        { "DisputeReason", row["DisputeReason"] },
+                        { "SupportingDocumentIds", docArray },
+                        { "OriginalAmount", row["OriginalAmount"] },
+                        { "DisputedAmount", row["DisputedAmount"] },
+                        { "AccountStatusBeforeDispute", row["AccountStatusBeforeDispute"] },
+                        { "AccountStatusAfterDispute", row["AccountStatusAfterDispute"] }
                     };
                     personList.Add(item);
                 }

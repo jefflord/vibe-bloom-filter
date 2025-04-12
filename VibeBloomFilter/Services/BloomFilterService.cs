@@ -22,6 +22,18 @@ public class BloomFilterService
     // Bloom filter for UserId column
     private readonly IBloomFilter _userIdFilter;
     
+    // Bloom filter for Credit Bureau column
+    private readonly IBloomFilter _creditBureauFilter;
+    
+    // Bloom filter for Account Number column
+    private readonly IBloomFilter _accountNumberFilter;
+    
+    // Bloom filter for SSN column
+    private readonly IBloomFilter _ssnFilter;
+    
+    // Bloom filter for Disputed Item Description column
+    private readonly IBloomFilter _disputedItemFilter;
+    
     // DataTable containing sample data
     private readonly DataTable _sampleData;
     
@@ -62,6 +74,26 @@ public class BloomFilterService
             expectedElements: ExpectedElementCount, 
             errorRate: FalsePositiveRate,
             hashFunction: new Murmur3());
+            
+        _creditBureauFilter = FilterBuilder.Build(
+            expectedElements: ExpectedElementCount, 
+            errorRate: FalsePositiveRate,
+            hashFunction: new Murmur3());
+            
+        _accountNumberFilter = FilterBuilder.Build(
+            expectedElements: ExpectedElementCount, 
+            errorRate: FalsePositiveRate,
+            hashFunction: new Murmur3());
+            
+        _ssnFilter = FilterBuilder.Build(
+            expectedElements: ExpectedElementCount, 
+            errorRate: FalsePositiveRate,
+            hashFunction: new Murmur3());
+            
+        _disputedItemFilter = FilterBuilder.Build(
+            expectedElements: ExpectedElementCount, 
+            errorRate: FalsePositiveRate,
+            hashFunction: new Murmur3());
         
         // Load sample data from JSON files
         _logger.LogInformation("Loading sample data from JSON files");
@@ -93,6 +125,17 @@ public class BloomFilterService
         table.Columns.Add("Name", typeof(string));
         table.Columns.Add("Address", typeof(string));
         table.Columns.Add("UserId", typeof(int));
+        table.Columns.Add("DisputeDate", typeof(string));
+        table.Columns.Add("CreditBureau", typeof(string));
+        table.Columns.Add("AccountNumber", typeof(string));
+        table.Columns.Add("SSN", typeof(string));
+        table.Columns.Add("DisputedItemDescription", typeof(string));
+        table.Columns.Add("DisputeReason", typeof(string));
+        table.Columns.Add("SupportingDocumentIds", typeof(string));
+        table.Columns.Add("OriginalAmount", typeof(decimal));
+        table.Columns.Add("DisputedAmount", typeof(decimal));
+        table.Columns.Add("AccountStatusBeforeDispute", typeof(string));
+        table.Columns.Add("AccountStatusAfterDispute", typeof(string));
 
         try
         {
@@ -154,9 +197,84 @@ public class BloomFilterService
                                 {
                                     userId = userIdElement.GetInt32();
                                 }
+
+                                // Extract additional fields
+                                string disputeDate = item.TryGetValue("DisputeDate", out JsonElement disputeDateElement) ? 
+                                    disputeDateElement.ToString() : string.Empty;
                                 
-                                // Add row to table
-                                table.Rows.Add(name, address, userId);
+                                string creditBureau = item.TryGetValue("CreditBureau", out JsonElement creditBureauElement) ? 
+                                    creditBureauElement.ToString() : string.Empty;
+                                
+                                string accountNumber = item.TryGetValue("AccountNumber", out JsonElement accountNumberElement) ? 
+                                    accountNumberElement.ToString() : string.Empty;
+                                
+                                string ssn = item.TryGetValue("SSN", out JsonElement ssnElement) ? 
+                                    ssnElement.ToString() : string.Empty;
+                                
+                                string disputedItemDescription = item.TryGetValue("DisputedItemDescription", out JsonElement disputedItemElement) ? 
+                                    disputedItemElement.ToString() : string.Empty;
+                                
+                                string disputeReason = item.TryGetValue("DisputeReason", out JsonElement disputeReasonElement) ? 
+                                    disputeReasonElement.ToString() : string.Empty;
+                                
+                                // Handle supporting document IDs (could be array or string)
+                                string supportingDocIds = string.Empty;
+                                if (item.TryGetValue("SupportingDocumentIds", out JsonElement docsElement))
+                                {
+                                    if (docsElement.ValueKind == JsonValueKind.Array)
+                                    {
+                                        var docsList = new List<string>();
+                                        foreach (var doc in docsElement.EnumerateArray())
+                                        {
+                                            docsList.Add(doc.ToString());
+                                        }
+                                        supportingDocIds = string.Join(",", docsList);
+                                    }
+                                    else
+                                    {
+                                        supportingDocIds = docsElement.ToString();
+                                    }
+                                }
+
+                                // Handle decimal amounts
+                                decimal originalAmount = 0;
+                                if (item.TryGetValue("OriginalAmount", out JsonElement originalAmtElement) &&
+                                    originalAmtElement.ValueKind == JsonValueKind.Number)
+                                {
+                                    originalAmount = originalAmtElement.GetDecimal();
+                                }
+
+                                decimal disputedAmount = 0;
+                                if (item.TryGetValue("DisputedAmount", out JsonElement disputedAmtElement) &&
+                                    disputedAmtElement.ValueKind == JsonValueKind.Number)
+                                {
+                                    disputedAmount = disputedAmtElement.GetDecimal();
+                                }
+
+                                string accountStatusBeforeDispute = item.TryGetValue("AccountStatusBeforeDispute", out JsonElement beforeStatusElement) ? 
+                                    beforeStatusElement.ToString() : string.Empty;
+                                
+                                string accountStatusAfterDispute = item.TryGetValue("AccountStatusAfterDispute", out JsonElement afterStatusElement) ? 
+                                    afterStatusElement.ToString() : string.Empty;
+
+                                // Add all extracted values to the row
+                                table.Rows.Add(
+                                    name,
+                                    address,
+                                    userId,
+                                    disputeDate,
+                                    creditBureau,
+                                    accountNumber,
+                                    ssn,
+                                    disputedItemDescription,
+                                    disputeReason,
+                                    supportingDocIds,
+                                    originalAmount,
+                                    disputedAmount,
+                                    accountStatusBeforeDispute,
+                                    accountStatusAfterDispute
+                                );
+                                
                                 rowsAdded++;
                             }
                             catch (Exception ex)
@@ -200,12 +318,48 @@ public class BloomFilterService
         table.Columns.Add("Name", typeof(string));
         table.Columns.Add("Address", typeof(string));
         table.Columns.Add("UserId", typeof(int));
+        table.Columns.Add("DisputeDate", typeof(string));
+        table.Columns.Add("CreditBureau", typeof(string));
+        table.Columns.Add("AccountNumber", typeof(string));
+        table.Columns.Add("SSN", typeof(string));
+        table.Columns.Add("DisputedItemDescription", typeof(string));
+        table.Columns.Add("DisputeReason", typeof(string));
+        table.Columns.Add("SupportingDocumentIds", typeof(string));
+        table.Columns.Add("OriginalAmount", typeof(decimal));
+        table.Columns.Add("DisputedAmount", typeof(decimal));
+        table.Columns.Add("AccountStatusBeforeDispute", typeof(string));
+        table.Columns.Add("AccountStatusAfterDispute", typeof(string));
 
         // Sample names, streets, and cities to generate data
         var firstNames = new[] { "James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda", "William", "Elizabeth" };
         var lastNames = new[] { "Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor" };
         var streets = new[] { "Main St", "Oak Ave", "Maple Dr", "Cedar Ln", "Pine Rd", "Elm St", "Washington Ave", "Park Blvd", "Lake Dr", "River Rd" };
         var cities = new[] { "New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose" };
+        
+        // Sample data for the new fields
+        var creditBureaus = new[] { "Experian", "Equifax", "TransUnion" };
+        var disputedItems = new[] { 
+            "Unauthorized late payment fee", 
+            "Incorrect account balance", 
+            "Account not mine", 
+            "Paid account showing as unpaid", 
+            "Incorrect personal information",
+            "Account closed still showing active",
+            "Duplicate account",
+            "Identity theft"
+        };
+        var disputeReasons = new[] {
+            "Payment was made on time via online banking",
+            "Statement shows different amount than what was agreed upon",
+            "Never opened this account",
+            "Have receipt showing payment was made in full",
+            "Name is misspelled/wrong address",
+            "Account was closed on specified date",
+            "Same account reported multiple times",
+            "Victim of identity fraud, police report attached"
+        };
+        var accountStatuses = new[] { "Current", "30 Days Late", "60 Days Late", "90+ Days Late", "Closed", "In Collections", "Charged Off" };
+        var reviewStatuses = new[] { "Under Review", "Investigation Complete", "Resolved - In Favor", "Resolved - Against", "Pending Documentation", "Escalated" };
         
         // Generate 100 random records
         var random = new Random(42); // Using seed for reproducibility
@@ -222,7 +376,49 @@ public class BloomFilterService
             
             var userId = 10000 + i;  // Ensure unique user IDs
             
-            table.Rows.Add(name, address, userId);
+            // Generate data for new fields
+            var today = DateTimeOffset.Now;
+            var disputeDate = today.AddDays(-random.Next(1, 180)).ToString("yyyy-MM-dd");
+            var creditBureau = creditBureaus[random.Next(creditBureaus.Length)];
+            var accountNumber = $"{random.Next(1000, 9999)}-{random.Next(100, 999)}-{random.Next(1000, 9999)}";
+            var ssn = $"{random.Next(100, 999)}-{random.Next(10, 99)}-{random.Next(1000, 9999)}";
+            
+            var itemIndex = random.Next(disputedItems.Length);
+            var disputedItemDescription = disputedItems[itemIndex];
+            var disputeReason = disputeReasons[itemIndex]; // Matching reason to item
+            
+            var docCount = random.Next(1, 4);
+            var docIds = new List<string>();
+            for (int d = 0; d < docCount; d++)
+            {
+                docIds.Add($"doc-{random.Next(100, 999)}");
+            }
+            var supportingDocumentIds = string.Join(",", docIds);
+            
+            var originalAmount = Math.Round((decimal)random.Next(10, 500) + (decimal)random.NextDouble(), 2);
+            var disputedAmount = Math.Round(originalAmount, 2); // Same amount for simplicity, could be modified for partial disputes
+            
+            var statusBeforeIndex = random.Next(accountStatuses.Length);
+            var accountStatusBeforeDispute = accountStatuses[statusBeforeIndex];
+            var accountStatusAfterDispute = reviewStatuses[random.Next(reviewStatuses.Length)];
+            
+            // Add all values to the row
+            table.Rows.Add(
+                name, 
+                address, 
+                userId, 
+                disputeDate, 
+                creditBureau, 
+                accountNumber, 
+                ssn,
+                disputedItemDescription, 
+                disputeReason, 
+                supportingDocumentIds, 
+                originalAmount, 
+                disputedAmount,
+                accountStatusBeforeDispute, 
+                accountStatusAfterDispute
+            );
         }
 
         return table;
@@ -249,6 +445,31 @@ public class BloomFilterService
             
             int userId = (int)row["UserId"];
             _userIdFilter.Add(BitConverter.GetBytes(userId));
+            
+            // Add new fields to their bloom filters
+            string? creditBureau = row["CreditBureau"].ToString();
+            if (!string.IsNullOrEmpty(creditBureau))
+            {
+                _creditBureauFilter.Add(Encoding.UTF8.GetBytes(creditBureau));
+            }
+            
+            string? accountNumber = row["AccountNumber"].ToString();
+            if (!string.IsNullOrEmpty(accountNumber))
+            {
+                _accountNumberFilter.Add(Encoding.UTF8.GetBytes(accountNumber));
+            }
+            
+            string? ssn = row["SSN"].ToString();
+            if (!string.IsNullOrEmpty(ssn))
+            {
+                _ssnFilter.Add(Encoding.UTF8.GetBytes(ssn));
+            }
+            
+            string? disputedItem = row["DisputedItemDescription"].ToString();
+            if (!string.IsNullOrEmpty(disputedItem))
+            {
+                _disputedItemFilter.Add(Encoding.UTF8.GetBytes(disputedItem));
+            }
         }
     }
 
@@ -258,7 +479,7 @@ public class BloomFilterService
     public DataTable GetSampleData() => _sampleData;
 
     /// <summary>
-    /// Queries all three Bloom filters with the provided input
+    /// Queries all Bloom filters with the provided input
     /// </summary>
     /// <param name="query">String to search for in the Bloom filters</param>
     /// <returns>Dictionary indicating potential matches in each column</returns>
@@ -282,6 +503,22 @@ public class BloomFilterService
             userIdMatch = _userIdFilter.Contains(userIdBytes);
         }
         result["UserId"] = userIdMatch;
+        
+        // Check for match in Credit Bureau column
+        byte[] creditBureauBytes = Encoding.UTF8.GetBytes(query);
+        result["CreditBureau"] = _creditBureauFilter.Contains(creditBureauBytes);
+        
+        // Check for match in Account Number column
+        byte[] accountNumberBytes = Encoding.UTF8.GetBytes(query);
+        result["AccountNumber"] = _accountNumberFilter.Contains(accountNumberBytes);
+        
+        // Check for match in SSN column
+        byte[] ssnBytes = Encoding.UTF8.GetBytes(query);
+        result["SSN"] = _ssnFilter.Contains(ssnBytes);
+        
+        // Check for match in Disputed Item Description column
+        byte[] disputedItemBytes = Encoding.UTF8.GetBytes(query);
+        result["DisputedItemDescription"] = _disputedItemFilter.Contains(disputedItemBytes);
         
         return result;
     }

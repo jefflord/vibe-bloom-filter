@@ -1,15 +1,18 @@
 {
   "compilerOptions": {
-    "target": "es2020",
-    "module": "es2020",
-    "moduleResolution": "node",
+    "target": "es2015",
+    "module": "none",
+    "lib": ["dom", "es2015"],
+    "sourceMap": true,
+    "outDir": "js",
+    "rootDir": "ts",
     "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "js"
+    "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "ts/**/*"
-  ]
+  "include": ["ts/**/*.ts"],
+  "exclude": ["node_modules"]
 }

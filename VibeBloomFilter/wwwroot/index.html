@@ -42,6 +42,26 @@
                             <h4>User ID</h4>
                             <div class="indicator">?</div>
                         </div>
+
+                        <div class="result-item" id="creditBureauResult">
+                            <h4>Credit Bureau</h4>
+                            <div class="indicator">?</div>
+                        </div>
+
+                        <div class="result-item" id="accountNumberResult">
+                            <h4>Account Number</h4>
+                            <div class="indicator">?</div>
+                        </div>
+
+                        <div class="result-item" id="ssnResult">
+                            <h4>SSN</h4>
+                            <div class="indicator">?</div>
+                        </div>
+
+                        <div class="result-item" id="disputedItemResult">
+                            <h4>Disputed Item</h4>
+                            <div class="indicator">?</div>
+                        </div>
                     </div>
                     
                     <div class="explanation">
@@ -61,7 +81,7 @@
                 <p>This shows some of the data that the Bloom filters were created from:</p>
                 
                 <div class="button-container">
-                    <button id="generateFilesButton">Generate 10 Sample JSON Files</button>
+                    <button id="generateFilesButton">Generate Sample JSON Files</button>
                     <span id="generationStatus" class="status-message"></span>
                 </div>
                 
@@ -69,17 +89,28 @@
                     <p id="dataSourceInfo" class="data-source-info"></p>
                 </div>
                 
-                <table id="sampleDataTable">
+                <table id="sampleDataTable" class="expanded-data-table">
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>Address</th>
                             <th>User ID</th>
+                            <th>Dispute Date</th>
+                            <th>Credit Bureau</th>
+                            <th>Account Number</th>
+                            <th>SSN</th>
+                            <th>Disputed Item</th>
+                            <th>Dispute Reason</th>
+                            <th>Supporting Documents</th>
+                            <th>Original Amount</th>
+                            <th>Disputed Amount</th>
+                            <th>Status Before</th>
+                            <th>Status After</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td colspan="3">Loading sample data...</td>
+                            <td colspan="14">Loading sample data...</td>
                         </tr>
                     </tbody>
                 </table>

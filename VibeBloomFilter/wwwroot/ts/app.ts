@@ -13,12 +13,27 @@ interface BloomFilterResult {
     Name: boolean;
     Address: boolean;
     UserId: boolean;
+    CreditBureau: boolean;
+    AccountNumber: boolean;
+    SSN: boolean;
+    DisputedItemDescription: boolean;
 }
 
 interface SampleDataItem {
     Name: string;
     Address: string;
     UserId: number;
+    DisputeDate: string;
+    CreditBureau: string;
+    AccountNumber: string;
+    SSN: string;
+    DisputedItemDescription: string;
+    DisputeReason: string;
+    SupportingDocumentIds: string[];
+    OriginalAmount: number;
+    DisputedAmount: number;
+    AccountStatusBeforeDispute: string;
+    AccountStatusAfterDispute: string;
 }
 
 interface SampleDataResponse {
@@ -146,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             // Restore button state
             generateFilesButton.disabled = false;
-            generateFilesButton.textContent = 'Generate 10 Sample JSON Files';
+            generateFilesButton.textContent = 'Generate Sample JSON Files';
         }
     }
 
@@ -159,6 +174,12 @@ document.addEventListener('DOMContentLoaded', () => {
         updateIndicator(nameResult.querySelector('.indicator')!, result.Name);
         updateIndicator(addressResult.querySelector('.indicator')!, result.Address);
         updateIndicator(userIdResult.querySelector('.indicator')!, result.UserId);
+        
+        // Update indicators for new fields
+        updateIndicator(document.querySelector('#creditBureauResult .indicator')!, result.CreditBureau);
+        updateIndicator(document.querySelector('#accountNumberResult .indicator')!, result.AccountNumber);
+        updateIndicator(document.querySelector('#ssnResult .indicator')!, result.SSN);
+        updateIndicator(document.querySelector('#disputedItemResult .indicator')!, result.DisputedItemDescription);
     }
 
     /**
@@ -212,10 +233,37 @@ document.addEventListener('DOMContentLoaded', () => {
             // Populate table with sample data
             sampleDataResponse.data.forEach(item => {
                 const row = document.createElement('tr');
+                
+                // Format document IDs if they exist
+                let documentsDisplay = '';
+                if (item.SupportingDocumentIds) {
+                    if (Array.isArray(item.SupportingDocumentIds)) {
+                        documentsDisplay = item.SupportingDocumentIds.join(', ');
+                    } else {
+                        // Handle string representation (could happen from JSON serialization)
+                        documentsDisplay = String(item.SupportingDocumentIds);
+                    }
+                }
+                
+                // Format amounts with currency symbol
+                const originalAmount = `$${item.OriginalAmount.toFixed(2)}`;
+                const disputedAmount = `$${item.DisputedAmount.toFixed(2)}`;
+                
                 row.innerHTML = `
                     <td>${escapeHtml(item.Name)}</td>
                     <td>${escapeHtml(item.Address)}</td>
                     <td>${item.UserId}</td>
+                    <td>${escapeHtml(item.DisputeDate)}</td>
+                    <td>${escapeHtml(item.CreditBureau)}</td>
+                    <td>${escapeHtml(item.AccountNumber)}</td>
+                    <td>${escapeHtml(item.SSN)}</td>
+                    <td>${escapeHtml(item.DisputedItemDescription)}</td>
+                    <td>${escapeHtml(item.DisputeReason)}</td>
+                    <td>${escapeHtml(documentsDisplay)}</td>
+                    <td>${originalAmount}</td>
+                    <td>${disputedAmount}</td>
+                    <td>${escapeHtml(item.AccountStatusBeforeDispute)}</td>
+                    <td>${escapeHtml(item.AccountStatusAfterDispute)}</td>
                 `;
                 sampleDataTableBody.appendChild(row);
             });
@@ -223,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error loading sample data:', error);
             sampleDataTableBody.innerHTML = `
                 <tr>
-                    <td colspan="3" class="error-message">Failed to load sample data. Please refresh the page to try again.</td>
+                    <td colspan="14" class="error-message">Failed to load sample data. Please refresh the page to try again.</td>
                 </tr>
             `;
             
