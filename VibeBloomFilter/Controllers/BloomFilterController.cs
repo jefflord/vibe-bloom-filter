@@ -98,7 +98,7 @@ public class BloomFilterController : ControllerBase
     /// <param name="count">Number of files to generate</param>
     /// <returns>Result containing the paths of the generated files</returns>
     [HttpPost("generate")]
-    public IActionResult GenerateSampleFiles([FromQuery] int count = 100)
+    public IActionResult GenerateSampleFiles([FromQuery] int count = 3600)
     {
         try
         {
@@ -121,7 +121,7 @@ public class BloomFilterController : ControllerBase
             {
                 // Take a random subset of the data for each file
                 var random = new Random(Guid.NewGuid().GetHashCode());
-                var rowCount = random.Next(500, 1000); // Between 5 and 15 records per file
+                var rowCount = random.Next(950, 1050); // Between 5 and 15 records per file
                 
                 // Convert rows to Person objects
                 var personList = new List<Dictionary<string, object>>();

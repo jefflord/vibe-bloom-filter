@@ -132,11 +132,16 @@ document.addEventListener('DOMContentLoaded', () => {
         updateIndicator(nameResult.querySelector('.indicator'), result.Name);
         updateIndicator(addressResult.querySelector('.indicator'), result.Address);
         updateIndicator(userIdResult.querySelector('.indicator'), result.UserId);
-        // Update indicators for new fields
+        
+        // Update indicators for all new fields
         updateIndicator(document.querySelector('#creditBureauResult .indicator'), result.CreditBureau);
         updateIndicator(document.querySelector('#accountNumberResult .indicator'), result.AccountNumber);
         updateIndicator(document.querySelector('#ssnResult .indicator'), result.SSN);
         updateIndicator(document.querySelector('#disputedItemResult .indicator'), result.DisputedItemDescription);
+        updateIndicator(document.querySelector('#disputeReasonResult .indicator'), result.DisputeReason);
+        updateIndicator(document.querySelector('#statusBeforeResult .indicator'), result.AccountStatusBeforeDispute);
+        updateIndicator(document.querySelector('#statusAfterResult .indicator'), result.AccountStatusAfterDispute);
+        updateIndicator(document.querySelector('#disputeDateResult .indicator'), result.DisputeDate);
     }
     /**
      * Updates a specific indicator element based on the result value

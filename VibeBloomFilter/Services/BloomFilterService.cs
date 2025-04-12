@@ -34,6 +34,18 @@ public class BloomFilterService
     // Bloom filter for Disputed Item Description column
     private readonly IBloomFilter _disputedItemFilter;
     
+    // Bloom filter for Dispute Reason column
+    private readonly IBloomFilter _disputeReasonFilter;
+    
+    // Bloom filter for Account Status Before Dispute column
+    private readonly IBloomFilter _statusBeforeFilter;
+    
+    // Bloom filter for Account Status After Dispute column
+    private readonly IBloomFilter _statusAfterFilter;
+    
+    // Bloom filter for Dispute Date column
+    private readonly IBloomFilter _disputeDateFilter;
+    
     // DataTable containing sample data
     private readonly DataTable _sampleData;
     
@@ -91,6 +103,26 @@ public class BloomFilterService
             hashFunction: new Murmur3());
             
         _disputedItemFilter = FilterBuilder.Build(
+            expectedElements: ExpectedElementCount, 
+            errorRate: FalsePositiveRate,
+            hashFunction: new Murmur3());
+        
+        _disputeReasonFilter = FilterBuilder.Build(
+            expectedElements: ExpectedElementCount, 
+            errorRate: FalsePositiveRate,
+            hashFunction: new Murmur3());
+        
+        _statusBeforeFilter = FilterBuilder.Build(
+            expectedElements: ExpectedElementCount, 
+            errorRate: FalsePositiveRate,
+            hashFunction: new Murmur3());
+        
+        _statusAfterFilter = FilterBuilder.Build(
+            expectedElements: ExpectedElementCount, 
+            errorRate: FalsePositiveRate,
+            hashFunction: new Murmur3());
+        
+        _disputeDateFilter = FilterBuilder.Build(
             expectedElements: ExpectedElementCount, 
             errorRate: FalsePositiveRate,
             hashFunction: new Murmur3());
@@ -470,6 +502,30 @@ public class BloomFilterService
             {
                 _disputedItemFilter.Add(Encoding.UTF8.GetBytes(disputedItem));
             }
+            
+            string? disputeReason = row["DisputeReason"].ToString();
+            if (!string.IsNullOrEmpty(disputeReason))
+            {
+                _disputeReasonFilter.Add(Encoding.UTF8.GetBytes(disputeReason));
+            }
+            
+            string? statusBefore = row["AccountStatusBeforeDispute"].ToString();
+            if (!string.IsNullOrEmpty(statusBefore))
+            {
+                _statusBeforeFilter.Add(Encoding.UTF8.GetBytes(statusBefore));
+            }
+            
+            string? statusAfter = row["AccountStatusAfterDispute"].ToString();
+            if (!string.IsNullOrEmpty(statusAfter))
+            {
+                _statusAfterFilter.Add(Encoding.UTF8.GetBytes(statusAfter));
+            }
+            
+            string? disputeDate = row["DisputeDate"].ToString();
+            if (!string.IsNullOrEmpty(disputeDate))
+            {
+                _disputeDateFilter.Add(Encoding.UTF8.GetBytes(disputeDate));
+            }
         }
     }
 
@@ -519,6 +575,22 @@ public class BloomFilterService
         // Check for match in Disputed Item Description column
         byte[] disputedItemBytes = Encoding.UTF8.GetBytes(query);
         result["DisputedItemDescription"] = _disputedItemFilter.Contains(disputedItemBytes);
+        
+        // Check for match in Dispute Reason column
+        byte[] disputeReasonBytes = Encoding.UTF8.GetBytes(query);
+        result["DisputeReason"] = _disputeReasonFilter.Contains(disputeReasonBytes);
+        
+        // Check for match in Account Status Before Dispute column
+        byte[] statusBeforeBytes = Encoding.UTF8.GetBytes(query);
+        result["AccountStatusBeforeDispute"] = _statusBeforeFilter.Contains(statusBeforeBytes);
+        
+        // Check for match in Account Status After Dispute column
+        byte[] statusAfterBytes = Encoding.UTF8.GetBytes(query);
+        result["AccountStatusAfterDispute"] = _statusAfterFilter.Contains(statusAfterBytes);
+        
+        // Check for match in Dispute Date column
+        byte[] disputeDateBytes = Encoding.UTF8.GetBytes(query);
+        result["DisputeDate"] = _disputeDateFilter.Contains(disputeDateBytes);
         
         return result;
     }
