@@ -75,57 +75,57 @@ public class BloomFilterService
         _nameFilter = FilterBuilder.Build(
             expectedElements: ExpectedElementCount, 
             errorRate: FalsePositiveRate,
-            hashFunction: new Murmur3());
+            hashFunction: new Murmur32BitsX86());
         
         _addressFilter = FilterBuilder.Build(
             expectedElements: ExpectedElementCount, 
             errorRate: FalsePositiveRate,
-            hashFunction: new Murmur3());
+            hashFunction: new Murmur32BitsX86());
         
         _userIdFilter = FilterBuilder.Build(
             expectedElements: ExpectedElementCount, 
             errorRate: FalsePositiveRate,
-            hashFunction: new Murmur3());
+            hashFunction: new Murmur32BitsX86());
             
         _creditBureauFilter = FilterBuilder.Build(
             expectedElements: ExpectedElementCount, 
             errorRate: FalsePositiveRate,
-            hashFunction: new Murmur3());
+            hashFunction: new Murmur32BitsX86());
             
         _accountNumberFilter = FilterBuilder.Build(
             expectedElements: ExpectedElementCount, 
             errorRate: FalsePositiveRate,
-            hashFunction: new Murmur3());
+            hashFunction: new Murmur32BitsX86());
             
         _ssnFilter = FilterBuilder.Build(
             expectedElements: ExpectedElementCount, 
             errorRate: FalsePositiveRate,
-            hashFunction: new Murmur3());
+            hashFunction: new Murmur32BitsX86());
             
         _disputedItemFilter = FilterBuilder.Build(
             expectedElements: ExpectedElementCount, 
             errorRate: FalsePositiveRate,
-            hashFunction: new Murmur3());
+            hashFunction: new Murmur32BitsX86());
         
         _disputeReasonFilter = FilterBuilder.Build(
             expectedElements: ExpectedElementCount, 
             errorRate: FalsePositiveRate,
-            hashFunction: new Murmur3());
+            hashFunction: new Murmur32BitsX86());
         
         _statusBeforeFilter = FilterBuilder.Build(
             expectedElements: ExpectedElementCount, 
             errorRate: FalsePositiveRate,
-            hashFunction: new Murmur3());
+            hashFunction: new Murmur32BitsX86());
         
         _statusAfterFilter = FilterBuilder.Build(
             expectedElements: ExpectedElementCount, 
             errorRate: FalsePositiveRate,
-            hashFunction: new Murmur3());
+            hashFunction: new Murmur32BitsX86());
         
         _disputeDateFilter = FilterBuilder.Build(
             expectedElements: ExpectedElementCount, 
             errorRate: FalsePositiveRate,
-            hashFunction: new Murmur3());
+            hashFunction: new Murmur32BitsX86());
         
         // Load sample data from JSON files
         _logger.LogInformation("Loading sample data from JSON files");

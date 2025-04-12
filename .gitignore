@@ -77,3 +77,10 @@ VibeBloomFilter/Data/*.json
 
 msbuild*
 
+VibeBloomFilter/obj/project.assets.json
+VibeBloomFilter/obj/project.nuget.cache
+VibeBloomFilter/obj/VibeBloomFilter.csproj.nuget.dgspec.json
+VibeBloomFilter/obj/Debug/net9.0/VibeBloomFilter.assets.cache
+VibeBloomFilter/obj/Debug/net9.0/VibeBloomFilter.csproj.AssemblyReference.cache
+VibeBloomFilter/obj/Debug/net9.0/VibeBloomFilter.csproj.CoreCompileInputs.cache
+VibeBloomFilter/obj/Debug/net9.0/VibeBloomFilter.MvcApplicationPartsAssemblyInfo.cs
