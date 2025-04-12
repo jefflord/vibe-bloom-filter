@@ -466,13 +466,15 @@ public class BloomFilterService
             string? name = row["Name"].ToString();
             if (!string.IsNullOrEmpty(name))
             {
-                _nameFilter.Add(Encoding.UTF8.GetBytes(name));
+                // Convert to lowercase for case-insensitive filtering
+                _nameFilter.Add(Encoding.UTF8.GetBytes(name.ToLowerInvariant()));
             }
             
             string? address = row["Address"].ToString();
             if (!string.IsNullOrEmpty(address))
             {
-                _addressFilter.Add(Encoding.UTF8.GetBytes(address));
+                // Convert to lowercase for case-insensitive filtering
+                _addressFilter.Add(Encoding.UTF8.GetBytes(address.ToLowerInvariant()));
             }
             
             int userId = (int)row["UserId"];
@@ -482,49 +484,57 @@ public class BloomFilterService
             string? creditBureau = row["CreditBureau"].ToString();
             if (!string.IsNullOrEmpty(creditBureau))
             {
-                _creditBureauFilter.Add(Encoding.UTF8.GetBytes(creditBureau));
+                // Convert to lowercase for case-insensitive filtering
+                _creditBureauFilter.Add(Encoding.UTF8.GetBytes(creditBureau.ToLowerInvariant()));
             }
             
             string? accountNumber = row["AccountNumber"].ToString();
             if (!string.IsNullOrEmpty(accountNumber))
             {
-                _accountNumberFilter.Add(Encoding.UTF8.GetBytes(accountNumber));
+                // Convert to lowercase for case-insensitive filtering
+                _accountNumberFilter.Add(Encoding.UTF8.GetBytes(accountNumber.ToLowerInvariant()));
             }
             
             string? ssn = row["SSN"].ToString();
             if (!string.IsNullOrEmpty(ssn))
             {
-                _ssnFilter.Add(Encoding.UTF8.GetBytes(ssn));
+                // Convert to lowercase for case-insensitive filtering
+                _ssnFilter.Add(Encoding.UTF8.GetBytes(ssn.ToLowerInvariant()));
             }
             
             string? disputedItem = row["DisputedItemDescription"].ToString();
             if (!string.IsNullOrEmpty(disputedItem))
             {
-                _disputedItemFilter.Add(Encoding.UTF8.GetBytes(disputedItem));
+                // Convert to lowercase for case-insensitive filtering
+                _disputedItemFilter.Add(Encoding.UTF8.GetBytes(disputedItem.ToLowerInvariant()));
             }
             
             string? disputeReason = row["DisputeReason"].ToString();
             if (!string.IsNullOrEmpty(disputeReason))
             {
-                _disputeReasonFilter.Add(Encoding.UTF8.GetBytes(disputeReason));
+                // Convert to lowercase for case-insensitive filtering
+                _disputeReasonFilter.Add(Encoding.UTF8.GetBytes(disputeReason.ToLowerInvariant()));
             }
             
             string? statusBefore = row["AccountStatusBeforeDispute"].ToString();
             if (!string.IsNullOrEmpty(statusBefore))
             {
-                _statusBeforeFilter.Add(Encoding.UTF8.GetBytes(statusBefore));
+                // Convert to lowercase for case-insensitive filtering
+                _statusBeforeFilter.Add(Encoding.UTF8.GetBytes(statusBefore.ToLowerInvariant()));
             }
             
             string? statusAfter = row["AccountStatusAfterDispute"].ToString();
             if (!string.IsNullOrEmpty(statusAfter))
             {
-                _statusAfterFilter.Add(Encoding.UTF8.GetBytes(statusAfter));
+                // Convert to lowercase for case-insensitive filtering
+                _statusAfterFilter.Add(Encoding.UTF8.GetBytes(statusAfter.ToLowerInvariant()));
             }
             
             string? disputeDate = row["DisputeDate"].ToString();
             if (!string.IsNullOrEmpty(disputeDate))
             {
-                _disputeDateFilter.Add(Encoding.UTF8.GetBytes(disputeDate));
+                // Convert to lowercase for case-insensitive filtering
+                _disputeDateFilter.Add(Encoding.UTF8.GetBytes(disputeDate.ToLowerInvariant()));
             }
         }
     }
@@ -543,12 +553,15 @@ public class BloomFilterService
     {
         var result = new Dictionary<string, bool>();
         
+        // Convert query to lowercase for case-insensitive search
+        string lowercaseQuery = query.ToLowerInvariant();
+        
         // Check for match in Name column
-        byte[] nameBytes = Encoding.UTF8.GetBytes(query);
+        byte[] nameBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
         result["Name"] = _nameFilter.Contains(nameBytes);
         
         // Check for match in Address column
-        byte[] addressBytes = Encoding.UTF8.GetBytes(query);
+        byte[] addressBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
         result["Address"] = _addressFilter.Contains(addressBytes);
         
         // Check for match in UserId column (if query can be parsed as int)
@@ -561,35 +574,35 @@ public class BloomFilterService
         result["UserId"] = userIdMatch;
         
         // Check for match in Credit Bureau column
-        byte[] creditBureauBytes = Encoding.UTF8.GetBytes(query);
+        byte[] creditBureauBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
         result["CreditBureau"] = _creditBureauFilter.Contains(creditBureauBytes);
         
         // Check for match in Account Number column
-        byte[] accountNumberBytes = Encoding.UTF8.GetBytes(query);
+        byte[] accountNumberBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
         result["AccountNumber"] = _accountNumberFilter.Contains(accountNumberBytes);
         
         // Check for match in SSN column
-        byte[] ssnBytes = Encoding.UTF8.GetBytes(query);
+        byte[] ssnBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
         result["SSN"] = _ssnFilter.Contains(ssnBytes);
         
         // Check for match in Disputed Item Description column
-        byte[] disputedItemBytes = Encoding.UTF8.GetBytes(query);
+        byte[] disputedItemBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
         result["DisputedItemDescription"] = _disputedItemFilter.Contains(disputedItemBytes);
         
         // Check for match in Dispute Reason column
-        byte[] disputeReasonBytes = Encoding.UTF8.GetBytes(query);
+        byte[] disputeReasonBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
         result["DisputeReason"] = _disputeReasonFilter.Contains(disputeReasonBytes);
         
         // Check for match in Account Status Before Dispute column
-        byte[] statusBeforeBytes = Encoding.UTF8.GetBytes(query);
+        byte[] statusBeforeBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
         result["AccountStatusBeforeDispute"] = _statusBeforeFilter.Contains(statusBeforeBytes);
         
         // Check for match in Account Status After Dispute column
-        byte[] statusAfterBytes = Encoding.UTF8.GetBytes(query);
+        byte[] statusAfterBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
         result["AccountStatusAfterDispute"] = _statusAfterFilter.Contains(statusAfterBytes);
         
         // Check for match in Dispute Date column
-        byte[] disputeDateBytes = Encoding.UTF8.GetBytes(query);
+        byte[] disputeDateBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
         result["DisputeDate"] = _disputeDateFilter.Contains(disputeDateBytes);
         
         return result;
