@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using System.Text.Json;
 using VibeBloomFilter.Services;
 
 namespace VibeBloomFilter.Controllers;
@@ -37,62 +38,6 @@ public class BloomFilterController : ControllerBase
     }
 
     /// <summary>
-    /// Gets a sample of the data for display purposes
-    /// </summary>
-    /// <param name="count">Maximum number of rows to return</param>
-    /// <returns>List of data rows</returns>
-    [HttpGet("sample")]
-    public IActionResult GetSampleData([FromQuery] int count = 10)
-    {
-        var data = _bloomFilterService.GetSampleData();
-        
-        // Convert DataTable to a list of dictionaries for easy JSON serialization
-        var result = new List<Dictionary<string, object>>();
-        
-        // Take only the requested number of rows
-        int rowCount = Math.Min(count, data.Rows.Count);
-        
-        for (int i = 0; i < rowCount; i++)
-        {
-            var row = data.Rows[i];
-            
-            // Handle supporting document IDs - convert from comma-separated string to array
-            var supportingDocIds = row["SupportingDocumentIds"].ToString();
-            var docArray = !string.IsNullOrEmpty(supportingDocIds) 
-                ? supportingDocIds.Split(',').Select(id => id.Trim()).ToArray() 
-                : new string[0];
-            
-            var item = new Dictionary<string, object>
-            {
-                { "Name", row["Name"] },
-                { "Address", row["Address"] },
-                { "UserId", row["UserId"] },
-                { "DisputeDate", row["DisputeDate"] },
-                { "CreditBureau", row["CreditBureau"] },
-                { "AccountNumber", row["AccountNumber"] },
-                { "SSN", row["SSN"] },
-                { "DisputedItemDescription", row["DisputedItemDescription"] },
-                { "DisputeReason", row["DisputeReason"] },
-                { "SupportingDocumentIds", docArray },
-                { "OriginalAmount", row["OriginalAmount"] },
-                { "DisputedAmount", row["DisputedAmount"] },
-                { "AccountStatusBeforeDispute", row["AccountStatusBeforeDispute"] },
-                { "AccountStatusAfterDispute", row["AccountStatusAfterDispute"] }
-            };
-            
-            result.Add(item);
-        }
-        
-        // Return data with metadata
-        return Ok(new {
-            TotalCount = data.Rows.Count,
-            DisplayCount = result.Count,
-            Data = result,
-            LoadedFromFiles = _bloomFilterService.LoadedFromJsonFiles
-        });
-    }
-
-    /// <summary>
     /// Generates sample JSON files in the Data directory
     /// </summary>
     /// <param name="count">Number of files to generate</param>
@@ -112,47 +57,104 @@ public class BloomFilterController : ControllerBase
                 _logger.LogInformation("Created Data directory: {Path}", dataDirectory);
             }
             
-            // Get sample data
-            var data = _bloomFilterService.GetSampleData();
             var generatedFiles = new List<string>();
             
-            // Create JSON files with subsets of the data
+            // Sample data for generating files
+            var firstNames = new[] { "James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda", "William", "Elizabeth" };
+            var lastNames = new[] { "Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor" };
+            var streets = new[] { "Main St", "Oak Ave", "Maple Dr", "Cedar Ln", "Pine Rd", "Elm St", "Washington Ave", "Park Blvd", "Lake Dr", "River Rd" };
+            var cities = new[] { "New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose" };
+            
+            // Sample data for the new fields
+            var creditBureaus = new[] { "Experian", "Equifax", "TransUnion" };
+            var disputedItems = new[] { 
+                "Unauthorized late payment fee", 
+                "Incorrect account balance", 
+                "Account not mine", 
+                "Paid account showing as unpaid", 
+                "Incorrect personal information",
+                "Account closed still showing active",
+                "Duplicate account",
+                "Identity theft"
+            };
+            var disputeReasons = new[] {
+                "Payment was made on time via online banking",
+                "Statement shows different amount than what was agreed upon",
+                "Never opened this account",
+                "Have receipt showing payment was made in full",
+                "Name is misspelled/wrong address",
+                "Account was closed on specified date",
+                "Same account reported multiple times",
+                "Victim of identity fraud, police report attached"
+            };
+            var accountStatuses = new[] { "Current", "30 Days Late", "60 Days Late", "90+ Days Late", "Closed", "In Collections", "Charged Off" };
+            var reviewStatuses = new[] { "Under Review", "Investigation Complete", "Resolved - In Favor", "Resolved - Against", "Pending Documentation", "Escalated" };
+            
+            // Create JSON files 
             for (int i = 0; i < count; i++)
             {
-                // Take a random subset of the data for each file
+                // Create a random generator with a unique seed for each file
                 var random = new Random(Guid.NewGuid().GetHashCode());
-                var rowCount = random.Next(950, 1050); // Between 5 and 15 records per file
+                var rowCount = random.Next(95, 105); // Approximately 100 records per file
                 
-                // Convert rows to Person objects
+                // Generate a list of sample persons
                 var personList = new List<Dictionary<string, object>>();
-                for (int j = 0; j < Math.Min(rowCount, data.Rows.Count); j++)
+                for (int j = 0; j < rowCount; j++)
                 {
-                    // Get a random row from the dataset
-                    var rowIndex = random.Next(0, data.Rows.Count);
-                    var row = data.Rows[rowIndex];
+                    var firstName = firstNames[random.Next(firstNames.Length)];
+                    var lastName = lastNames[random.Next(lastNames.Length)];
+                    var name = $"{firstName} {lastName}";
                     
-                    // Handle supporting document IDs - convert from comma-separated string to array
-                    var supportingDocIds = row["SupportingDocumentIds"].ToString();
-                    var docArray = !string.IsNullOrEmpty(supportingDocIds) 
-                        ? supportingDocIds.Split(',').Select(id => id.Trim()).ToArray() 
-                        : new string[0];
+                    var streetNumber = random.Next(1, 9999);
+                    var street = streets[random.Next(streets.Length)];
+                    var city = cities[random.Next(cities.Length)];
+                    var address = $"{streetNumber} {street}, {city}";
+                    
+                    var userId = 10000 + (i * 1000) + j;  // Ensure unique user IDs
+                    
+                    // Generate data for new fields
+                    var today = DateTimeOffset.Now;
+                    var disputeDate = today.AddDays(-random.Next(1, 180)).ToString("yyyy-MM-dd");
+                    var creditBureau = creditBureaus[random.Next(creditBureaus.Length)];
+                    var accountNumber = $"{random.Next(1000, 9999)}-{random.Next(100, 999)}-{random.Next(1000, 9999)}";
+                    var ssn = $"{random.Next(100, 999)}-{random.Next(10, 99)}-{random.Next(1000, 9999)}";
+                    
+                    var itemIndex = random.Next(disputedItems.Length);
+                    var disputedItemDescription = disputedItems[itemIndex];
+                    var disputeReason = disputeReasons[itemIndex]; // Matching reason to item
+                    
+                    var statusBeforeIndex = random.Next(accountStatuses.Length);
+                    var accountStatusBeforeDispute = accountStatuses[statusBeforeIndex];
+                    var accountStatusAfterDispute = reviewStatuses[random.Next(reviewStatuses.Length)];
+                    
+                    // Generate supporting document IDs
+                    var docCount = random.Next(0, 4);
+                    var docIds = new string[docCount];
+                    for (int d = 0; d < docCount; d++)
+                    {
+                        docIds[d] = $"DOC-{random.Next(10000, 99999)}";
+                    }
+                    
+                    // Generate random amounts
+                    decimal originalAmount = Math.Round((decimal)random.Next(100, 10000) + random.Next(0, 100) / 100.0m, 2);
+                    decimal disputedAmount = Math.Round(originalAmount * (decimal)random.NextDouble(), 2);
                     
                     var item = new Dictionary<string, object>
                     {
-                        { "Name", row["Name"] },
-                        { "Address", row["Address"] },
-                        { "UserId", row["UserId"] },
-                        { "DisputeDate", row["DisputeDate"] },
-                        { "CreditBureau", row["CreditBureau"] },
-                        { "AccountNumber", row["AccountNumber"] },
-                        { "SSN", row["SSN"] },
-                        { "DisputedItemDescription", row["DisputedItemDescription"] },
-                        { "DisputeReason", row["DisputeReason"] },
-                        { "SupportingDocumentIds", docArray },
-                        { "OriginalAmount", row["OriginalAmount"] },
-                        { "DisputedAmount", row["DisputedAmount"] },
-                        { "AccountStatusBeforeDispute", row["AccountStatusBeforeDispute"] },
-                        { "AccountStatusAfterDispute", row["AccountStatusAfterDispute"] }
+                        { "Name", name },
+                        { "Address", address },
+                        { "UserId", userId },
+                        { "DisputeDate", disputeDate },
+                        { "CreditBureau", creditBureau },
+                        { "AccountNumber", accountNumber },
+                        { "SSN", ssn },
+                        { "DisputedItemDescription", disputedItemDescription },
+                        { "DisputeReason", disputeReason },
+                        { "SupportingDocumentIds", docIds },
+                        { "OriginalAmount", originalAmount },
+                        { "DisputedAmount", disputedAmount },
+                        { "AccountStatusBeforeDispute", accountStatusBeforeDispute },
+                        { "AccountStatusAfterDispute", accountStatusAfterDispute }
                     };
                     personList.Add(item);
                 }
@@ -162,21 +164,33 @@ public class BloomFilterController : ControllerBase
                 var filePath = Path.Combine(dataDirectory, fileName);
                 
                 // Serialize and write to file
-                var jsonOptions = new System.Text.Json.JsonSerializerOptions
+                var jsonOptions = new JsonSerializerOptions
                 {
                     WriteIndented = true
                 };
-                var jsonContent = System.Text.Json.JsonSerializer.Serialize(personList, jsonOptions);
+                var jsonContent = JsonSerializer.Serialize(personList, jsonOptions);
                 System.IO.File.WriteAllText(filePath, jsonContent);
                 
                 _logger.LogInformation("Generated file: {FilePath} with {Count} records", filePath, personList.Count);
                 generatedFiles.Add(fileName);
+                
+                // Clean up to minimize memory usage
+                personList.Clear();
+                personList = null;
+                jsonContent = null;
+                
+                // Force garbage collection periodically
+                if (i % 100 == 0)
+                {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                }
             }
             
             return Ok(new { 
                 Success = true, 
                 Message = $"Successfully generated {generatedFiles.Count} JSON files",
-                Files = generatedFiles
+                FilesCount = generatedFiles.Count
             });
         }
         catch (Exception ex)

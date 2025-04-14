@@ -46,9 +46,6 @@ public class BloomFilterService
     // Bloom filter for Dispute Date column
     private readonly IBloomFilter _disputeDateFilter;
     
-    // DataTable containing sample data
-    private readonly DataTable _sampleData;
-    
     // Logger
     private readonly ILogger<BloomFilterService> _logger;
     
@@ -62,7 +59,7 @@ public class BloomFilterService
     private const double FalsePositiveRate = 0.01;
     
     // Expected element count (we know we have 100 items)
-    private const int ExpectedElementCount = 2000000;
+    private const int ExpectedElementCount = 100;
 
     /// <summary>
     /// Constructor: Initializes the service by generating sample data and creating Bloom filters
@@ -127,200 +124,80 @@ public class BloomFilterService
             errorRate: FalsePositiveRate,
             hashFunction: new Murmur32BitsX86());
         
-        // Load sample data from JSON files
-        _logger.LogInformation("Loading sample data from JSON files");
-        _sampleData = LoadSampleDataFromJsonFiles();
+        // Populate bloom filters with data - now without keeping the data in memory
+        _logger.LogInformation("Populating bloom filters from JSON files");
+        LoadedFromJsonFiles = PopulateBloomFiltersFromJsonFiles();
         
-        // If no data was found in JSON files, generate sample data instead
-        if (_sampleData.Rows.Count == 0)
+        // If no data was found in JSON files, use generate sample data instead
+        if (!LoadedFromJsonFiles)
         {
             _logger.LogInformation("No data found in JSON files, generating sample data");
-            _sampleData = GenerateSampleData();
-        }
-        else
-        {
-            _logger.LogInformation("Successfully loaded {RowCount} rows from JSON files", _sampleData.Rows.Count);
+            PopulateBloomFiltersFromGeneratedData();
         }
         
-        // Populate bloom filters with data
-        _logger.LogInformation("Populating bloom filters");
-        PopulateBloomFilters();
-
-
-        _sampleData.Dispose();
+        // Force garbage collection to clean up any memory used during loading
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
     }
 
     /// <summary>
-    /// Loads data from JSON files in the Data directory
+    /// Populates bloom filters directly from JSON files without keeping all records in memory
     /// </summary>
-    private DataTable LoadSampleDataFromJsonFiles()
+    /// <returns>True if data was found and loaded, false otherwise</returns>
+    private bool PopulateBloomFiltersFromJsonFiles()
     {
-        // Create a new DataTable with the specified columns
-        var table = new DataTable();
-        table.Columns.Add("Name", typeof(string));
-        table.Columns.Add("Address", typeof(string));
-        table.Columns.Add("UserId", typeof(int));
-        table.Columns.Add("DisputeDate", typeof(string));
-        table.Columns.Add("CreditBureau", typeof(string));
-        table.Columns.Add("AccountNumber", typeof(string));
-        table.Columns.Add("SSN", typeof(string));
-        table.Columns.Add("DisputedItemDescription", typeof(string));
-        table.Columns.Add("DisputeReason", typeof(string));
-        table.Columns.Add("SupportingDocumentIds", typeof(string));
-        table.Columns.Add("OriginalAmount", typeof(decimal));
-        table.Columns.Add("DisputedAmount", typeof(decimal));
-        table.Columns.Add("AccountStatusBeforeDispute", typeof(string));
-        table.Columns.Add("AccountStatusAfterDispute", typeof(string));
-
         try
         {
+            // Define common stop words to exclude from the bloom filter
+            HashSet<string> stopWords = GetStopWords();
+            
             // Get the Data directory path
             var dataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Data");
             _logger.LogInformation("Looking for JSON files in directory: {Directory}", dataDirectory);
             
-            // If the directory doesn't exist, return empty table (will be populated with generated data)
+            // If the directory doesn't exist, return false (will use generated data)
             if (!Directory.Exists(dataDirectory))
             {
                 _logger.LogWarning("Data directory does not exist: {Directory}", dataDirectory);
-                return table;
+                return false;
             }
             
             // Get all JSON files in the Data directory
             var jsonFiles = Directory.GetFiles(dataDirectory, "*.json");
             _logger.LogInformation("Found {Count} JSON files in the Data directory", jsonFiles.Length);
             
-            // If no files are found, return empty table
+            // If no files are found, return false
             if (jsonFiles.Length == 0)
             {
                 _logger.LogWarning("No JSON files found in Data directory");
-                return table;
+                return false;
             }
             
-            // Read data from each JSON file and add to the DataTable
-            int totalRowsAdded = 0;
+            // Process each JSON file
+            int totalRowsProcessed = 0;
             foreach (var file in jsonFiles)
             {
                 try
                 {
                     _logger.LogDebug("Reading file: {FileName}", Path.GetFileName(file));
-                    // Read the file content
-                    string jsonContent = File.ReadAllText(file);
                     
-                    // Deserialize to list of dictionaries
-                    var items = JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>>(
-                        jsonContent, 
-                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    
-                    int rowsAdded = 0;
-                    if (items != null)
+                    // Process the file in a streaming manner
+                    using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
+                    using (JsonDocument doc = JsonDocument.Parse(fs))
                     {
-                        foreach (var item in items)
+                        int rowsProcessed = 0;
+                        JsonElement root = doc.RootElement;
+                        
+                        // Process each JSON object in the array
+                        foreach (JsonElement item in root.EnumerateArray())
                         {
-                            try
-                            {
-                                // Extract values, handle type conversions
-                                string name = item.TryGetValue("Name", out JsonElement nameElement) ? 
-                                    nameElement.ToString() : string.Empty;
-                                
-                                string address = item.TryGetValue("Address", out JsonElement addressElement) ? 
-                                    addressElement.ToString() : string.Empty;
-                                
-                                // Convert UserId from JsonElement to int
-                                int userId = 0;
-                                if (item.TryGetValue("UserId", out JsonElement userIdElement) && 
-                                    userIdElement.ValueKind == JsonValueKind.Number)
-                                {
-                                    userId = userIdElement.GetInt32();
-                                }
-
-                                // Extract additional fields
-                                string disputeDate = item.TryGetValue("DisputeDate", out JsonElement disputeDateElement) ? 
-                                    disputeDateElement.ToString() : string.Empty;
-                                
-                                string creditBureau = item.TryGetValue("CreditBureau", out JsonElement creditBureauElement) ? 
-                                    creditBureauElement.ToString() : string.Empty;
-                                
-                                string accountNumber = item.TryGetValue("AccountNumber", out JsonElement accountNumberElement) ? 
-                                    accountNumberElement.ToString() : string.Empty;
-                                
-                                string ssn = item.TryGetValue("SSN", out JsonElement ssnElement) ? 
-                                    ssnElement.ToString() : string.Empty;
-                                
-                                string disputedItemDescription = item.TryGetValue("DisputedItemDescription", out JsonElement disputedItemElement) ? 
-                                    disputedItemElement.ToString() : string.Empty;
-                                
-                                string disputeReason = item.TryGetValue("DisputeReason", out JsonElement disputeReasonElement) ? 
-                                    disputeReasonElement.ToString() : string.Empty;
-                                
-                                // Handle supporting document IDs (could be array or string)
-                                string supportingDocIds = string.Empty;
-                                if (item.TryGetValue("SupportingDocumentIds", out JsonElement docsElement))
-                                {
-                                    if (docsElement.ValueKind == JsonValueKind.Array)
-                                    {
-                                        var docsList = new List<string>();
-                                        foreach (var doc in docsElement.EnumerateArray())
-                                        {
-                                            docsList.Add(doc.ToString());
-                                        }
-                                        supportingDocIds = string.Join(",", docsList);
-                                    }
-                                    else
-                                    {
-                                        supportingDocIds = docsElement.ToString();
-                                    }
-                                }
-
-                                // Handle decimal amounts
-                                decimal originalAmount = 0;
-                                if (item.TryGetValue("OriginalAmount", out JsonElement originalAmtElement) &&
-                                    originalAmtElement.ValueKind == JsonValueKind.Number)
-                                {
-                                    originalAmount = originalAmtElement.GetDecimal();
-                                }
-
-                                decimal disputedAmount = 0;
-                                if (item.TryGetValue("DisputedAmount", out JsonElement disputedAmtElement) &&
-                                    disputedAmtElement.ValueKind == JsonValueKind.Number)
-                                {
-                                    disputedAmount = disputedAmtElement.GetDecimal();
-                                }
-
-                                string accountStatusBeforeDispute = item.TryGetValue("AccountStatusBeforeDispute", out JsonElement beforeStatusElement) ? 
-                                    beforeStatusElement.ToString() : string.Empty;
-                                
-                                string accountStatusAfterDispute = item.TryGetValue("AccountStatusAfterDispute", out JsonElement afterStatusElement) ? 
-                                    afterStatusElement.ToString() : string.Empty;
-
-                                // Add all extracted values to the row
-                                table.Rows.Add(
-                                    name,
-                                    address,
-                                    userId,
-                                    disputeDate,
-                                    creditBureau,
-                                    accountNumber,
-                                    ssn,
-                                    disputedItemDescription,
-                                    disputeReason,
-                                    supportingDocIds,
-                                    originalAmount,
-                                    disputedAmount,
-                                    accountStatusBeforeDispute,
-                                    accountStatusAfterDispute
-                                );
-                                
-                                rowsAdded++;
-                            }
-                            catch (Exception ex)
-                            {
-                                _logger.LogError(ex, "Error processing item in file {FileName}", Path.GetFileName(file));
-                            }
+                            ProcessJsonItem(item, stopWords);
+                            rowsProcessed++;
                         }
+                        
+                        _logger.LogInformation("Processed {RowCount} rows from file {FileName}", rowsProcessed, Path.GetFileName(file));
+                        totalRowsProcessed += rowsProcessed;
                     }
-                    
-                    _logger.LogInformation("Added {RowCount} rows from file {FileName}", rowsAdded, Path.GetFileName(file));
-                    totalRowsAdded += rowsAdded;
                 }
                 catch (Exception ex)
                 {
@@ -329,42 +206,80 @@ public class BloomFilterService
                 }
             }
             
-            _logger.LogInformation("Total rows added from all JSON files: {TotalRowCount}", totalRowsAdded);
-            
-            // Set the flag indicating whether data was loaded from files
-            LoadedFromJsonFiles = totalRowsAdded > 0;
+            _logger.LogInformation("Total rows processed from all JSON files: {TotalRowCount}", totalRowsProcessed);
+            return totalRowsProcessed > 0;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading JSON files");
-            LoadedFromJsonFiles = false;
+            return false;
         }
+    }
+    
+    /// <summary>
+    /// Processes a single JSON object and adds its values to bloom filters
+    /// </summary>
+    private void ProcessJsonItem(JsonElement item, HashSet<string> stopWords)
+    {
+        try
+        {
+            // Extract values from the JSON item
+            string name = GetJsonString(item, "Name");
+            string address = GetJsonString(item, "Address");
+            string creditBureau = GetJsonString(item, "CreditBureau");
+            string accountNumber = GetJsonString(item, "AccountNumber");
+            string ssn = GetJsonString(item, "SSN");
+            string disputedItemDescription = GetJsonString(item, "DisputedItemDescription");
+            string disputeReason = GetJsonString(item, "DisputeReason");
+            string accountStatusBeforeDispute = GetJsonString(item, "AccountStatusBeforeDispute");
+            string accountStatusAfterDispute = GetJsonString(item, "AccountStatusAfterDispute");
+            string disputeDate = GetJsonString(item, "DisputeDate");
 
-        return table;
+            // Process UserId
+            if (item.TryGetProperty("UserId", out JsonElement userIdElement) && 
+                userIdElement.ValueKind == JsonValueKind.Number)
+            {
+                int userId = userIdElement.GetInt32();
+                _userIdFilter.Add(BitConverter.GetBytes(userId));
+            }
+            
+            // Add extracted strings to respective filters
+            AddWordsToFilter(_nameFilter, name, stopWords);
+            AddWordsToFilter(_addressFilter, address, stopWords);
+            AddWordsToFilter(_creditBureauFilter, creditBureau, stopWords);
+            AddWordsToFilter(_accountNumberFilter, accountNumber, stopWords);
+            AddWordsToFilter(_ssnFilter, ssn, stopWords);
+            AddWordsToFilter(_disputedItemFilter, disputedItemDescription, stopWords);
+            AddWordsToFilter(_disputeReasonFilter, disputeReason, stopWords);
+            AddWordsToFilter(_statusBeforeFilter, accountStatusBeforeDispute, stopWords);
+            AddWordsToFilter(_statusAfterFilter, accountStatusAfterDispute, stopWords);
+            AddWordsToFilter(_disputeDateFilter, disputeDate, stopWords);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing JSON item");
+        }
+    }
+    
+    /// <summary>
+    /// Helper method to extract string from JsonElement
+    /// </summary>
+    private string GetJsonString(JsonElement element, string propertyName)
+    {
+        if (element.TryGetProperty(propertyName, out JsonElement property))
+        {
+            return property.ToString();
+        }
+        return string.Empty;
     }
 
     /// <summary>
-    /// Generates a table with 100 sample records
+    /// Populates bloom filters with generated sample data
     /// </summary>
-    private DataTable GenerateSampleData()
+    private void PopulateBloomFiltersFromGeneratedData()
     {
-        // Create a new DataTable with the specified columns
-        var table = new DataTable();
-        table.Columns.Add("Name", typeof(string));
-        table.Columns.Add("Address", typeof(string));
-        table.Columns.Add("UserId", typeof(int));
-        table.Columns.Add("DisputeDate", typeof(string));
-        table.Columns.Add("CreditBureau", typeof(string));
-        table.Columns.Add("AccountNumber", typeof(string));
-        table.Columns.Add("SSN", typeof(string));
-        table.Columns.Add("DisputedItemDescription", typeof(string));
-        table.Columns.Add("DisputeReason", typeof(string));
-        table.Columns.Add("SupportingDocumentIds", typeof(string));
-        table.Columns.Add("OriginalAmount", typeof(decimal));
-        table.Columns.Add("DisputedAmount", typeof(decimal));
-        table.Columns.Add("AccountStatusBeforeDispute", typeof(string));
-        table.Columns.Add("AccountStatusAfterDispute", typeof(string));
-
+        HashSet<string> stopWords = GetStopWords();
+        
         // Sample names, streets, and cities to generate data
         var firstNames = new[] { "James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda", "William", "Elizabeth" };
         var lastNames = new[] { "Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor" };
@@ -396,7 +311,7 @@ public class BloomFilterService
         var accountStatuses = new[] { "Current", "30 Days Late", "60 Days Late", "90+ Days Late", "Closed", "In Collections", "Charged Off" };
         var reviewStatuses = new[] { "Under Review", "Investigation Complete", "Resolved - In Favor", "Resolved - Against", "Pending Documentation", "Escalated" };
         
-        // Generate 100 random records
+        // Generate 100 records one at a time and add to filters without keeping them in memory
         var random = new Random(42); // Using seed for reproducibility
         for (int i = 0; i < 100; i++)
         {
@@ -422,50 +337,33 @@ public class BloomFilterService
             var disputedItemDescription = disputedItems[itemIndex];
             var disputeReason = disputeReasons[itemIndex]; // Matching reason to item
             
-            var docCount = random.Next(1, 4);
-            var docIds = new List<string>();
-            for (int d = 0; d < docCount; d++)
-            {
-                docIds.Add($"doc-{random.Next(100, 999)}");
-            }
-            var supportingDocumentIds = string.Join(",", docIds);
-            
-            var originalAmount = Math.Round((decimal)random.Next(10, 500) + (decimal)random.NextDouble(), 2);
-            var disputedAmount = Math.Round(originalAmount, 2); // Same amount for simplicity, could be modified for partial disputes
-            
             var statusBeforeIndex = random.Next(accountStatuses.Length);
             var accountStatusBeforeDispute = accountStatuses[statusBeforeIndex];
             var accountStatusAfterDispute = reviewStatuses[random.Next(reviewStatuses.Length)];
             
-            // Add all values to the row
-            table.Rows.Add(
-                name, 
-                address, 
-                userId, 
-                disputeDate, 
-                creditBureau, 
-                accountNumber, 
-                ssn,
-                disputedItemDescription, 
-                disputeReason, 
-                supportingDocumentIds, 
-                originalAmount, 
-                disputedAmount,
-                accountStatusBeforeDispute, 
-                accountStatusAfterDispute
-            );
+            // Add userId to filter
+            _userIdFilter.Add(BitConverter.GetBytes(userId));
+            
+            // Add string values to filters
+            AddWordsToFilter(_nameFilter, name, stopWords);
+            AddWordsToFilter(_addressFilter, address, stopWords);
+            AddWordsToFilter(_creditBureauFilter, creditBureau, stopWords);
+            AddWordsToFilter(_accountNumberFilter, accountNumber, stopWords);
+            AddWordsToFilter(_ssnFilter, ssn, stopWords);
+            AddWordsToFilter(_disputedItemFilter, disputedItemDescription, stopWords);
+            AddWordsToFilter(_disputeReasonFilter, disputeReason, stopWords);
+            AddWordsToFilter(_statusBeforeFilter, accountStatusBeforeDispute, stopWords);
+            AddWordsToFilter(_statusAfterFilter, accountStatusAfterDispute, stopWords);
+            AddWordsToFilter(_disputeDateFilter, disputeDate, stopWords);
         }
-
-        return table;
     }
-
+    
     /// <summary>
-    /// Iterates through the DataTable and adds each value to the appropriate Bloom filter
+    /// Returns a HashSet of common stop words to exclude from the bloom filter
     /// </summary>
-    private void PopulateBloomFilters()
+    private HashSet<string> GetStopWords()
     {
-        // Define common stop words to exclude from the bloom filter
-        HashSet<string> stopWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        return new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "a", "an", "the", "and", "or", "but", "is", "are", "was", "were", "be", "been", "being", 
             "in", "on", "at", "to", "for", "with", "by", "about", "against", "between", "into", "through", 
@@ -479,108 +377,38 @@ public class BloomFilterService
             "themselves", "what", "which", "who", "whom", "whose", "as", "if", "because", "until", "while", 
             "have", "has", "had", "do", "does", "did", "could", "would", "via"
         };
-
-        // Helper function to add words to filter
-        void AddWordsToFilter(IBloomFilter filter, string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-                return;
-
-            // Convert to lowercase for case-insensitive filtering
-            string lowercaseText = text.ToLowerInvariant();
-            
-            // Add the full text first
-            filter.Add(Encoding.UTF8.GetBytes(lowercaseText));
-
-            // If text contains multiple words, add individual words separately
-            string[] words = lowercaseText.Split(new[] { ' ', ',', '.', '-', ':', ';', '/', '\\', '(', ')', '[', ']', '{', '}' }, 
-                StringSplitOptions.RemoveEmptyEntries);
-                
-            if (words.Length > 1)
-            {
-                foreach (string word in words)
-                {
-                    // Skip stop words
-                    if (!stopWords.Contains(word) && word.Length > 1)
-                    {
-                        filter.Add(Encoding.UTF8.GetBytes(word));
-                    }
-                }
-            }
-        }
-        
-        foreach (DataRow row in _sampleData.Rows)
-        {
-            string? name = row["Name"].ToString();
-            if (!string.IsNullOrEmpty(name))
-            {
-                AddWordsToFilter(_nameFilter, name);
-            }
-            
-            string? address = row["Address"].ToString();
-            if (!string.IsNullOrEmpty(address))
-            {
-                AddWordsToFilter(_addressFilter, address);
-            }
-            
-            int userId = (int)row["UserId"];
-            _userIdFilter.Add(BitConverter.GetBytes(userId));
-            
-            // Add new fields to their bloom filters
-            string? creditBureau = row["CreditBureau"].ToString();
-            if (!string.IsNullOrEmpty(creditBureau))
-            {
-                AddWordsToFilter(_creditBureauFilter, creditBureau);
-            }
-            
-            string? accountNumber = row["AccountNumber"].ToString();
-            if (!string.IsNullOrEmpty(accountNumber))
-            {
-                AddWordsToFilter(_accountNumberFilter, accountNumber);
-            }
-            
-            string? ssn = row["SSN"].ToString();
-            if (!string.IsNullOrEmpty(ssn))
-            {
-                AddWordsToFilter(_ssnFilter, ssn);
-            }
-            
-            string? disputedItem = row["DisputedItemDescription"].ToString();
-            if (!string.IsNullOrEmpty(disputedItem))
-            {
-                AddWordsToFilter(_disputedItemFilter, disputedItem);
-            }
-            
-            string? disputeReason = row["DisputeReason"].ToString();
-            if (!string.IsNullOrEmpty(disputeReason))
-            {
-                AddWordsToFilter(_disputeReasonFilter, disputeReason);
-            }
-            
-            string? statusBefore = row["AccountStatusBeforeDispute"].ToString();
-            if (!string.IsNullOrEmpty(statusBefore))
-            {
-                AddWordsToFilter(_statusBeforeFilter, statusBefore);
-            }
-            
-            string? statusAfter = row["AccountStatusAfterDispute"].ToString();
-            if (!string.IsNullOrEmpty(statusAfter))
-            {
-                AddWordsToFilter(_statusAfterFilter, statusAfter);
-            }
-            
-            string? disputeDate = row["DisputeDate"].ToString();
-            if (!string.IsNullOrEmpty(disputeDate))
-            {
-                AddWordsToFilter(_disputeDateFilter, disputeDate);
-            }
-        }
     }
 
     /// <summary>
-    /// Returns the sample DataTable for reference
+    /// Adds words to filter, handling stop words and individual word indexing
     /// </summary>
-    public DataTable GetSampleData() => _sampleData;
+    private void AddWordsToFilter(IBloomFilter filter, string text, HashSet<string> stopWords)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return;
+
+        // Convert to lowercase for case-insensitive filtering
+        string lowercaseText = text.ToLowerInvariant();
+        
+        // Add the full text first
+        filter.Add(Encoding.UTF8.GetBytes(lowercaseText));
+
+        // If text contains multiple words, add individual words separately
+        string[] words = lowercaseText.Split(new[] { ' ', ',', '.', '-', ':', ';', '/', '\\', '(', ')', '[', ']', '{', '}' }, 
+            StringSplitOptions.RemoveEmptyEntries);
+            
+        if (words.Length > 1)
+        {
+            foreach (string word in words)
+            {
+                // Skip stop words
+                if (!stopWords.Contains(word) && word.Length > 1)
+                {
+                    filter.Add(Encoding.UTF8.GetBytes(word));
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// Queries all Bloom filters with the provided input
@@ -609,20 +437,7 @@ public class BloomFilterService
         }
         
         // Define stop words to exclude from search
-        HashSet<string> stopWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-        {
-            "a", "an", "the", "and", "or", "but", "is", "are", "was", "were", "be", "been", "being", 
-            "in", "on", "at", "to", "for", "with", "by", "about", "against", "between", "into", "through", 
-            "during", "before", "after", "above", "below", "from", "of", "up", "down", "out", "off", "over", 
-            "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", 
-            "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", 
-            "not", "only", "own", "same", "so", "than", "too", "very", "can", "will", "just", "should", 
-            "now", "this", "that", "these", "those", "i", "me", "my", "myself", "we", "our", "ours", 
-            "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", 
-            "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", 
-            "themselves", "what", "which", "who", "whom", "whose", "as", "if", "because", "until", "while", 
-            "have", "has", "had", "do", "does", "did", "could", "would", "via"
-        };
+        HashSet<string> stopWords = GetStopWords();
         
         // Convert query to lowercase for case-insensitive search
         string lowercaseQuery = query.ToLowerInvariant();
