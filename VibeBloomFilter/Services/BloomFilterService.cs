@@ -62,7 +62,7 @@ public class BloomFilterService
     private const double FalsePositiveRate = 0.01;
     
     // Expected element count (we know we have 100 items)
-    private const int ExpectedElementCount = 100;
+    private const int ExpectedElementCount = 2000000;
 
     /// <summary>
     /// Constructor: Initializes the service by generating sample data and creating Bloom filters
@@ -145,6 +145,9 @@ public class BloomFilterService
         // Populate bloom filters with data
         _logger.LogInformation("Populating bloom filters");
         PopulateBloomFilters();
+
+
+        _sampleData.Dispose();
     }
 
     /// <summary>
@@ -461,21 +464,63 @@ public class BloomFilterService
     /// </summary>
     private void PopulateBloomFilters()
     {
+        // Define common stop words to exclude from the bloom filter
+        HashSet<string> stopWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "a", "an", "the", "and", "or", "but", "is", "are", "was", "were", "be", "been", "being", 
+            "in", "on", "at", "to", "for", "with", "by", "about", "against", "between", "into", "through", 
+            "during", "before", "after", "above", "below", "from", "of", "up", "down", "out", "off", "over", 
+            "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", 
+            "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", 
+            "not", "only", "own", "same", "so", "than", "too", "very", "can", "will", "just", "should", 
+            "now", "this", "that", "these", "those", "i", "me", "my", "myself", "we", "our", "ours", 
+            "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", 
+            "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", 
+            "themselves", "what", "which", "who", "whom", "whose", "as", "if", "because", "until", "while", 
+            "have", "has", "had", "do", "does", "did", "could", "would", "via"
+        };
+
+        // Helper function to add words to filter
+        void AddWordsToFilter(IBloomFilter filter, string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return;
+
+            // Convert to lowercase for case-insensitive filtering
+            string lowercaseText = text.ToLowerInvariant();
+            
+            // Add the full text first
+            filter.Add(Encoding.UTF8.GetBytes(lowercaseText));
+
+            // If text contains multiple words, add individual words separately
+            string[] words = lowercaseText.Split(new[] { ' ', ',', '.', '-', ':', ';', '/', '\\', '(', ')', '[', ']', '{', '}' }, 
+                StringSplitOptions.RemoveEmptyEntries);
+                
+            if (words.Length > 1)
+            {
+                foreach (string word in words)
+                {
+                    // Skip stop words
+                    if (!stopWords.Contains(word) && word.Length > 1)
+                    {
+                        filter.Add(Encoding.UTF8.GetBytes(word));
+                    }
+                }
+            }
+        }
         
         foreach (DataRow row in _sampleData.Rows)
         {
             string? name = row["Name"].ToString();
             if (!string.IsNullOrEmpty(name))
             {
-                // Convert to lowercase for case-insensitive filtering
-                _nameFilter.Add(Encoding.UTF8.GetBytes(name.ToLowerInvariant()));
+                AddWordsToFilter(_nameFilter, name);
             }
             
             string? address = row["Address"].ToString();
             if (!string.IsNullOrEmpty(address))
             {
-                // Convert to lowercase for case-insensitive filtering
-                _addressFilter.Add(Encoding.UTF8.GetBytes(address.ToLowerInvariant()));
+                AddWordsToFilter(_addressFilter, address);
             }
             
             int userId = (int)row["UserId"];
@@ -485,57 +530,49 @@ public class BloomFilterService
             string? creditBureau = row["CreditBureau"].ToString();
             if (!string.IsNullOrEmpty(creditBureau))
             {
-                // Convert to lowercase for case-insensitive filtering
-                _creditBureauFilter.Add(Encoding.UTF8.GetBytes(creditBureau.ToLowerInvariant()));
+                AddWordsToFilter(_creditBureauFilter, creditBureau);
             }
             
             string? accountNumber = row["AccountNumber"].ToString();
             if (!string.IsNullOrEmpty(accountNumber))
             {
-                // Convert to lowercase for case-insensitive filtering
-                _accountNumberFilter.Add(Encoding.UTF8.GetBytes(accountNumber.ToLowerInvariant()));
+                AddWordsToFilter(_accountNumberFilter, accountNumber);
             }
             
             string? ssn = row["SSN"].ToString();
             if (!string.IsNullOrEmpty(ssn))
             {
-                // Convert to lowercase for case-insensitive filtering
-                _ssnFilter.Add(Encoding.UTF8.GetBytes(ssn.ToLowerInvariant()));
+                AddWordsToFilter(_ssnFilter, ssn);
             }
             
             string? disputedItem = row["DisputedItemDescription"].ToString();
             if (!string.IsNullOrEmpty(disputedItem))
             {
-                // Convert to lowercase for case-insensitive filtering
-                _disputedItemFilter.Add(Encoding.UTF8.GetBytes(disputedItem.ToLowerInvariant()));
+                AddWordsToFilter(_disputedItemFilter, disputedItem);
             }
             
             string? disputeReason = row["DisputeReason"].ToString();
             if (!string.IsNullOrEmpty(disputeReason))
             {
-                // Convert to lowercase for case-insensitive filtering
-                _disputeReasonFilter.Add(Encoding.UTF8.GetBytes(disputeReason.ToLowerInvariant()));
+                AddWordsToFilter(_disputeReasonFilter, disputeReason);
             }
             
             string? statusBefore = row["AccountStatusBeforeDispute"].ToString();
             if (!string.IsNullOrEmpty(statusBefore))
             {
-                // Convert to lowercase for case-insensitive filtering
-                _statusBeforeFilter.Add(Encoding.UTF8.GetBytes(statusBefore.ToLowerInvariant()));
+                AddWordsToFilter(_statusBeforeFilter, statusBefore);
             }
             
             string? statusAfter = row["AccountStatusAfterDispute"].ToString();
             if (!string.IsNullOrEmpty(statusAfter))
             {
-                // Convert to lowercase for case-insensitive filtering
-                _statusAfterFilter.Add(Encoding.UTF8.GetBytes(statusAfter.ToLowerInvariant()));
+                AddWordsToFilter(_statusAfterFilter, statusAfter);
             }
             
             string? disputeDate = row["DisputeDate"].ToString();
             if (!string.IsNullOrEmpty(disputeDate))
             {
-                // Convert to lowercase for case-insensitive filtering
-                _disputeDateFilter.Add(Encoding.UTF8.GetBytes(disputeDate.ToLowerInvariant()));
+                AddWordsToFilter(_disputeDateFilter, disputeDate);
             }
         }
     }
@@ -554,16 +591,79 @@ public class BloomFilterService
     {
         var result = new Dictionary<string, bool>();
         
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            // Initialize all results to false if query is empty
+            result["Name"] = false;
+            result["Address"] = false;
+            result["UserId"] = false;
+            result["CreditBureau"] = false;
+            result["AccountNumber"] = false;
+            result["SSN"] = false;
+            result["DisputedItemDescription"] = false;
+            result["DisputeReason"] = false;
+            result["AccountStatusBeforeDispute"] = false;
+            result["AccountStatusAfterDispute"] = false;
+            result["DisputeDate"] = false;
+            return result;
+        }
+        
+        // Define stop words to exclude from search
+        HashSet<string> stopWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "a", "an", "the", "and", "or", "but", "is", "are", "was", "were", "be", "been", "being", 
+            "in", "on", "at", "to", "for", "with", "by", "about", "against", "between", "into", "through", 
+            "during", "before", "after", "above", "below", "from", "of", "up", "down", "out", "off", "over", 
+            "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", 
+            "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", 
+            "not", "only", "own", "same", "so", "than", "too", "very", "can", "will", "just", "should", 
+            "now", "this", "that", "these", "those", "i", "me", "my", "myself", "we", "our", "ours", 
+            "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", 
+            "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", 
+            "themselves", "what", "which", "who", "whom", "whose", "as", "if", "because", "until", "while", 
+            "have", "has", "had", "do", "does", "did", "could", "would", "via"
+        };
+        
         // Convert query to lowercase for case-insensitive search
         string lowercaseQuery = query.ToLowerInvariant();
         
+        // Helper function to check if any word from a multi-word query matches in a filter
+        bool CheckMultiWordQuery(IBloomFilter filter, string queryText)
+        {
+            // First, check if the full phrase matches
+            byte[] fullQueryBytes = Encoding.UTF8.GetBytes(queryText);
+            bool fullMatch = filter.Contains(fullQueryBytes);
+            
+            if (fullMatch)
+                return true;
+                
+            // Split into words and check each non-stop word
+            string[] words = queryText.Split(new[] { ' ', ',', '.', '-', ':', ';', '/', '\\', '(', ')', '[', ']', '{', '}' }, 
+                StringSplitOptions.RemoveEmptyEntries);
+                
+            if (words.Length > 1)
+            {
+                foreach (string word in words)
+                {
+                    // Skip stop words and single characters
+                    if (!stopWords.Contains(word) && word.Length > 1)
+                    {
+                        byte[] wordBytes = Encoding.UTF8.GetBytes(word);
+                        if (filter.Contains(wordBytes))
+                            return true;
+                    }
+                }
+                return false;
+            }
+            
+            return fullMatch;
+        }
+        
         // Check for match in Name column
-        byte[] nameBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
-        result["Name"] = _nameFilter.Contains(nameBytes);
+        result["Name"] = CheckMultiWordQuery(_nameFilter, lowercaseQuery);
         
         // Check for match in Address column
-        byte[] addressBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
-        result["Address"] = _addressFilter.Contains(addressBytes);
+        result["Address"] = CheckMultiWordQuery(_addressFilter, lowercaseQuery);
         
         // Check for match in UserId column (if query can be parsed as int)
         bool userIdMatch = false;
@@ -575,36 +675,28 @@ public class BloomFilterService
         result["UserId"] = userIdMatch;
         
         // Check for match in Credit Bureau column
-        byte[] creditBureauBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
-        result["CreditBureau"] = _creditBureauFilter.Contains(creditBureauBytes);
+        result["CreditBureau"] = CheckMultiWordQuery(_creditBureauFilter, lowercaseQuery);
         
         // Check for match in Account Number column
-        byte[] accountNumberBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
-        result["AccountNumber"] = _accountNumberFilter.Contains(accountNumberBytes);
+        result["AccountNumber"] = CheckMultiWordQuery(_accountNumberFilter, lowercaseQuery);
         
         // Check for match in SSN column
-        byte[] ssnBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
-        result["SSN"] = _ssnFilter.Contains(ssnBytes);
+        result["SSN"] = CheckMultiWordQuery(_ssnFilter, lowercaseQuery);
         
         // Check for match in Disputed Item Description column
-        byte[] disputedItemBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
-        result["DisputedItemDescription"] = _disputedItemFilter.Contains(disputedItemBytes);
+        result["DisputedItemDescription"] = CheckMultiWordQuery(_disputedItemFilter, lowercaseQuery);
         
         // Check for match in Dispute Reason column
-        byte[] disputeReasonBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
-        result["DisputeReason"] = _disputeReasonFilter.Contains(disputeReasonBytes);
+        result["DisputeReason"] = CheckMultiWordQuery(_disputeReasonFilter, lowercaseQuery);
         
         // Check for match in Account Status Before Dispute column
-        byte[] statusBeforeBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
-        result["AccountStatusBeforeDispute"] = _statusBeforeFilter.Contains(statusBeforeBytes);
+        result["AccountStatusBeforeDispute"] = CheckMultiWordQuery(_statusBeforeFilter, lowercaseQuery);
         
         // Check for match in Account Status After Dispute column
-        byte[] statusAfterBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
-        result["AccountStatusAfterDispute"] = _statusAfterFilter.Contains(statusAfterBytes);
+        result["AccountStatusAfterDispute"] = CheckMultiWordQuery(_statusAfterFilter, lowercaseQuery);
         
         // Check for match in Dispute Date column
-        byte[] disputeDateBytes = Encoding.UTF8.GetBytes(lowercaseQuery);
-        result["DisputeDate"] = _disputeDateFilter.Contains(disputeDateBytes);
+        result["DisputeDate"] = CheckMultiWordQuery(_disputeDateFilter, lowercaseQuery);
         
         return result;
     }
