@@ -58,8 +58,8 @@ public class BloomFilterService
     // would lead to too many false positives, reducing the utility of the filters.
     private const double FalsePositiveRate = 0.01;
     
-    // Expected element count (we know we have 100 items)
-    private const int ExpectedElementCount = 100;
+    // Expected element count (3 million items)
+    private const int ExpectedElementCount = 3000000;
 
     /// <summary>
     /// Constructor: Initializes the service by generating sample data and creating Bloom filters

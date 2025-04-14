@@ -14,8 +14,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-// API URL for the backend
+// API BASE URL for the backend
 const API_BASE_URL = '/api/bloomfilter';
+
 // Wait for the DOM to be fully loaded before attaching events
 document.addEventListener('DOMContentLoaded', () => {
     // Get references to DOM elements
@@ -27,9 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const userIdResult = document.getElementById('userIdResult');
     const generateFilesButton = document.getElementById('generateFilesButton');
     const generationStatus = document.getElementById('generationStatus');
-    const sampleDataTableBody = document.querySelector('#sampleDataTable tbody');
-    // Load sample data when the page loads
-    loadSampleData();
+    
+    // Hide the sample data section completely
+    const sampleDataTable = document.getElementById('sampleDataTable');
+    if (sampleDataTable) {
+        sampleDataTable.style.display = 'none';
+    }
+    
     // Add click event listener to the search button
     searchButton.addEventListener('click', () => {
         const query = searchInput.value.trim();
@@ -40,14 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Please enter a value to search for');
         }
     });
+    
     // Add enter key event listener to the search input
     searchInput.addEventListener('keyup', (event) => {
         if (event.key === 'Enter') {
             searchButton.click();
         }
     });
+    
     // Add click event listener to the generate files button
     generateFilesButton.addEventListener('click', generateSampleFiles);
+    
     /**
      * Queries the backend API with the provided search term and updates the UI with results
      * @param query The search term to query
@@ -58,15 +66,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Show loading state
                 searchButton.disabled = true;
                 searchButton.textContent = 'Searching...';
+                
                 // Send query to the backend API
                 const response = yield fetch(`${API_BASE_URL}/query?query=${encodeURIComponent(query)}`);
                 if (!response.ok) {
                     throw new Error(`Error: ${response.statusText}`);
                 }
+                
                 // Parse response data
                 const result = yield response.json();
+                
                 // Update the UI with results
                 updateResultDisplay(result);
+                
                 // Show the results section
                 searchResults.classList.remove('hidden');
             }
@@ -81,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    
     /**
      * Generates sample JSON files by calling the backend API
      */
@@ -92,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 generateFilesButton.textContent = 'Generating...';
                 generationStatus.textContent = 'Generating files...';
                 generationStatus.className = 'status-message';
+                
                 // Call the backend API to generate files
                 const response = yield fetch(`${API_BASE_URL}/generate`, {
                     method: 'POST'
@@ -99,11 +113,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!response.ok) {
                     throw new Error(`Error: ${response.statusText}`);
                 }
+                
                 // Parse response data
                 const result = yield response.json();
+                
                 // Update UI with success message
                 generationStatus.textContent = `${result.message}`;
                 generationStatus.className = 'status-message success';
+                
                 // Show the generated files for 5 seconds
                 setTimeout(() => {
                     generationStatus.textContent = '';
@@ -123,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    
     /**
      * Updates the UI to display bloom filter query results
      * @param result The bloom filter query results
@@ -143,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateIndicator(document.querySelector('#statusAfterResult .indicator'), result.AccountStatusAfterDispute);
         updateIndicator(document.querySelector('#disputeDateResult .indicator'), result.DisputeDate);
     }
+    
     /**
      * Updates a specific indicator element based on the result value
      * @param element The indicator DOM element to update
@@ -151,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateIndicator(element, isPresent) {
         // Clear existing classes
         element.classList.remove('positive', 'negative');
+        
         // Set appropriate class and text based on result
         if (isPresent) {
             element.classList.add('positive');
@@ -161,93 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
             element.textContent = 'No';
         }
     }
-    /**
-     * Loads sample data from the backend API and displays it in the table
-     */
-    function loadSampleData() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                // Request sample data from the API
-                const response = yield fetch(`${API_BASE_URL}/sample?count=10`);
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.statusText}`);
-                }
-                // Parse response data
-                const sampleDataResponse = yield response.json();
-                // Update data source information
-                const dataSourceElement = document.getElementById('dataSourceInfo');
-                if (dataSourceElement) {
-                    if (sampleDataResponse.loadedFromFiles) {
-                        dataSourceElement.textContent = `Loaded ${sampleDataResponse.totalCount} records from JSON files. Showing ${sampleDataResponse.displayCount} rows.`;
-                        dataSourceElement.classList.add('success-text');
-                    }
-                    else {
-                        dataSourceElement.textContent = `Using ${sampleDataResponse.totalCount} generated records. Showing ${sampleDataResponse.displayCount} rows.`;
-                    }
-                }
-                // Clear existing rows
-                sampleDataTableBody.innerHTML = '';
-                // Populate table with sample data
-                sampleDataResponse.data.forEach(item => {
-                    const row = document.createElement('tr');
-                    // Format document IDs if they exist
-                    let documentsDisplay = '';
-                    if (item.SupportingDocumentIds) {
-                        if (Array.isArray(item.SupportingDocumentIds)) {
-                            documentsDisplay = item.SupportingDocumentIds.join(', ');
-                        }
-                        else {
-                            // Handle string representation (could happen from JSON serialization)
-                            documentsDisplay = String(item.SupportingDocumentIds);
-                        }
-                    }
-                    // Format amounts with currency symbol
-                    const originalAmount = `$${item.OriginalAmount.toFixed(2)}`;
-                    const disputedAmount = `$${item.DisputedAmount.toFixed(2)}`;
-                    row.innerHTML = `
-                    <td>${escapeHtml(item.Name)}</td>
-                    <td>${escapeHtml(item.Address)}</td>
-                    <td>${item.UserId}</td>
-                    <td>${escapeHtml(item.DisputeDate)}</td>
-                    <td>${escapeHtml(item.CreditBureau)}</td>
-                    <td>${escapeHtml(item.AccountNumber)}</td>
-                    <td>${escapeHtml(item.SSN)}</td>
-                    <td>${escapeHtml(item.DisputedItemDescription)}</td>
-                    <td>${escapeHtml(item.DisputeReason)}</td>
-                    <td>${escapeHtml(documentsDisplay)}</td>
-                    <td>${originalAmount}</td>
-                    <td>${disputedAmount}</td>
-                    <td>${escapeHtml(item.AccountStatusBeforeDispute)}</td>
-                    <td>${escapeHtml(item.AccountStatusAfterDispute)}</td>
-                `;
-                    sampleDataTableBody.appendChild(row);
-                });
-            }
-            catch (error) {
-                console.error('Error loading sample data:', error);
-                sampleDataTableBody.innerHTML = `
-                <tr>
-                    <td colspan="14" class="error-message">Failed to load sample data. Please refresh the page to try again.</td>
-                </tr>
-            `;
-                // Clear data source info on error
-                const dataSourceElement = document.getElementById('dataSourceInfo');
-                if (dataSourceElement) {
-                    dataSourceElement.textContent = 'Error loading data from server.';
-                    dataSourceElement.classList.add('error-text');
-                }
-            }
-        });
-    }
-    /**
-     * Helper function to escape HTML special characters to prevent XSS
-     * @param text The text to escape
-     * @returns Escaped text safe for insertion into HTML
-     */
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
+    
+    // Note: loadSampleData function removed since we no longer need to display sample data
 });
-//# sourceMappingURL=app.js.map
