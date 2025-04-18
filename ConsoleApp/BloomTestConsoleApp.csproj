@@ -8,7 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BloomFilter.NetCore" Version="2.4.1" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
+    <PackageReference Include="BloomFilter.NetCore" Version="2.5.1" />
   </ItemGroup>
 
 </Project>

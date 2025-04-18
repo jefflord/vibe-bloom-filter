@@ -52,6 +52,10 @@ public class BloomFilterService
     // Flag to indicate if data was loaded from JSON files
     public bool LoadedFromJsonFiles { get; private set; }
 
+    // Statistics for bloom filter population
+    public int TotalRecordsProcessed { get; private set; }
+    public int TotalFieldsAdded { get; private set; }
+
     // False positive rate for all filters (1%)
     // This rate was chosen as a good balance between accuracy and memory usage.
     // Lower rates would increase memory usage significantly while higher rates
@@ -135,6 +139,16 @@ public class BloomFilterService
             PopulateBloomFiltersFromGeneratedData();
         }
         
+        // Log the statistics after building the bloom filter
+        _logger.LogInformation("Bloom Filter Statistics: {TotalRecords} records processed, {TotalFields} fields added to filters", 
+            TotalRecordsProcessed, TotalFieldsAdded);
+        
+        // Console output for better visibility
+        Console.WriteLine($"=== Bloom Filter Build Complete ===");
+        Console.WriteLine($"Total Records Processed: {TotalRecordsProcessed:N0}");
+        Console.WriteLine($"Total Fields Added: {TotalFieldsAdded:N0}");
+        Console.WriteLine($"===============================");
+        
         // Force garbage collection to clean up any memory used during loading
         GC.Collect();
         GC.WaitForPendingFinalizers();
@@ -207,6 +221,7 @@ public class BloomFilterService
             }
             
             _logger.LogInformation("Total rows processed from all JSON files: {TotalRowCount}", totalRowsProcessed);
+            TotalRecordsProcessed = totalRowsProcessed;
             return totalRowsProcessed > 0;
         }
         catch (Exception ex)
@@ -241,6 +256,7 @@ public class BloomFilterService
             {
                 int userId = userIdElement.GetInt32();
                 _userIdFilter.Add(BitConverter.GetBytes(userId));
+                TotalFieldsAdded++;
             }
             
             // Add extracted strings to respective filters
@@ -254,6 +270,7 @@ public class BloomFilterService
             AddWordsToFilter(_statusBeforeFilter, accountStatusBeforeDispute, stopWords);
             AddWordsToFilter(_statusAfterFilter, accountStatusAfterDispute, stopWords);
             AddWordsToFilter(_disputeDateFilter, disputeDate, stopWords);
+
         }
         catch (Exception ex)
         {
@@ -343,6 +360,7 @@ public class BloomFilterService
             
             // Add userId to filter
             _userIdFilter.Add(BitConverter.GetBytes(userId));
+            TotalFieldsAdded++;
             
             // Add string values to filters
             AddWordsToFilter(_nameFilter, name, stopWords);
@@ -356,6 +374,7 @@ public class BloomFilterService
             AddWordsToFilter(_statusAfterFilter, accountStatusAfterDispute, stopWords);
             AddWordsToFilter(_disputeDateFilter, disputeDate, stopWords);
         }
+        TotalRecordsProcessed = 100;
     }
     
     /// <summary>
@@ -390,12 +409,18 @@ public class BloomFilterService
         // Convert to lowercase for case-insensitive filtering
         string lowercaseText = text.ToLowerInvariant();
         
-        // Add the full text first
-        filter.Add(Encoding.UTF8.GetBytes(lowercaseText));
+        // Remove punctuation from the text before adding to bloom filter
+        string textWithoutPunctuation = RemovePunctuation(lowercaseText);
+        
+        // Add the full text without punctuation
+        if (!string.IsNullOrWhiteSpace(textWithoutPunctuation))
+        {
+            filter.Add(Encoding.UTF8.GetBytes(textWithoutPunctuation));
+            TotalFieldsAdded++;
+        }
 
         // If text contains multiple words, add individual words separately
-        string[] words = lowercaseText.Split(new[] { ' ', ',', '.', '-', ':', ';', '/', '\\', '(', ')', '[', ']', '{', '}' }, 
-            StringSplitOptions.RemoveEmptyEntries);
+        string[] words = textWithoutPunctuation.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             
         if (words.Length > 1)
         {
@@ -405,9 +430,33 @@ public class BloomFilterService
                 if (!stopWords.Contains(word) && word.Length > 1)
                 {
                     filter.Add(Encoding.UTF8.GetBytes(word));
+                    TotalFieldsAdded++;
                 }
             }
         }
+    }
+    
+    /// <summary>
+    /// Helper method to remove punctuation from text
+    /// </summary>
+    private string RemovePunctuation(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return text;
+            
+        var sb = new StringBuilder();
+        foreach (char c in text)
+        {
+            if (!char.IsPunctuation(c))
+            {
+                sb.Append(c);
+            }
+            else if (c == ' ' || c == '-') // Keep spaces and hyphens as they may be important for certain terms
+            {
+                sb.Append(c);
+            }
+        }
+        return sb.ToString();
     }
 
     /// <summary>
@@ -442,6 +491,9 @@ public class BloomFilterService
         // Convert query to lowercase for case-insensitive search
         string lowercaseQuery = query.ToLowerInvariant();
         
+        // Remove punctuation from the query
+        string queryWithoutPunctuation = RemovePunctuation(lowercaseQuery);
+        
         // Helper function to check if any word from a multi-word query matches in a filter
         bool CheckMultiWordQuery(IBloomFilter filter, string queryText)
         {
@@ -453,8 +505,7 @@ public class BloomFilterService
                 return true;
                 
             // Split into words and check each non-stop word
-            string[] words = queryText.Split(new[] { ' ', ',', '.', '-', ':', ';', '/', '\\', '(', ')', '[', ']', '{', '}' }, 
-                StringSplitOptions.RemoveEmptyEntries);
+            string[] words = queryText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 
             if (words.Length > 1)
             {
@@ -475,10 +526,10 @@ public class BloomFilterService
         }
         
         // Check for match in Name column
-        result["Name"] = CheckMultiWordQuery(_nameFilter, lowercaseQuery);
+        result["Name"] = CheckMultiWordQuery(_nameFilter, queryWithoutPunctuation);
         
         // Check for match in Address column
-        result["Address"] = CheckMultiWordQuery(_addressFilter, lowercaseQuery);
+        result["Address"] = CheckMultiWordQuery(_addressFilter, queryWithoutPunctuation);
         
         // Check for match in UserId column (if query can be parsed as int)
         bool userIdMatch = false;
@@ -490,28 +541,28 @@ public class BloomFilterService
         result["UserId"] = userIdMatch;
         
         // Check for match in Credit Bureau column
-        result["CreditBureau"] = CheckMultiWordQuery(_creditBureauFilter, lowercaseQuery);
+        result["CreditBureau"] = CheckMultiWordQuery(_creditBureauFilter, queryWithoutPunctuation);
         
         // Check for match in Account Number column
-        result["AccountNumber"] = CheckMultiWordQuery(_accountNumberFilter, lowercaseQuery);
+        result["AccountNumber"] = CheckMultiWordQuery(_accountNumberFilter, queryWithoutPunctuation);
         
         // Check for match in SSN column
-        result["SSN"] = CheckMultiWordQuery(_ssnFilter, lowercaseQuery);
+        result["SSN"] = CheckMultiWordQuery(_ssnFilter, queryWithoutPunctuation);
         
         // Check for match in Disputed Item Description column
-        result["DisputedItemDescription"] = CheckMultiWordQuery(_disputedItemFilter, lowercaseQuery);
+        result["DisputedItemDescription"] = CheckMultiWordQuery(_disputedItemFilter, queryWithoutPunctuation);
         
         // Check for match in Dispute Reason column
-        result["DisputeReason"] = CheckMultiWordQuery(_disputeReasonFilter, lowercaseQuery);
+        result["DisputeReason"] = CheckMultiWordQuery(_disputeReasonFilter, queryWithoutPunctuation);
         
         // Check for match in Account Status Before Dispute column
-        result["AccountStatusBeforeDispute"] = CheckMultiWordQuery(_statusBeforeFilter, lowercaseQuery);
+        result["AccountStatusBeforeDispute"] = CheckMultiWordQuery(_statusBeforeFilter, queryWithoutPunctuation);
         
         // Check for match in Account Status After Dispute column
-        result["AccountStatusAfterDispute"] = CheckMultiWordQuery(_statusAfterFilter, lowercaseQuery);
+        result["AccountStatusAfterDispute"] = CheckMultiWordQuery(_statusAfterFilter, queryWithoutPunctuation);
         
         // Check for match in Dispute Date column
-        result["DisputeDate"] = CheckMultiWordQuery(_disputeDateFilter, lowercaseQuery);
+        result["DisputeDate"] = CheckMultiWordQuery(_disputeDateFilter, queryWithoutPunctuation);
         
         return result;
     }

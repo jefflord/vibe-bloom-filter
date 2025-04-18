@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BloomFilter.NetCore" Version="2.4.1" />
+    <PackageReference Include="BloomFilter.NetCore" Version="2.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
   </ItemGroup>
 

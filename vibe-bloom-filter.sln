@@ -4,7 +4,7 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VibeBloomFilter", "VibeBloomFilter\VibeBloomFilter.csproj", "{F3180FC2-A6F6-2F68-0DA7-E871E5E8AE53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{FB40B2AD-B766-482F-96D0-117CA1A455BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloomTestConsoleApp", "ConsoleApp\BloomTestConsoleApp.csproj", "{FB40B2AD-B766-482F-96D0-117CA1A455BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
